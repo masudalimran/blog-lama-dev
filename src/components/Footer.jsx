@@ -47,7 +47,7 @@ export default function Footer() {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="h3">Lates Post</Typography>
+          <Typography variant="h3">Latest Post</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
