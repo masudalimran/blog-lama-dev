@@ -14,7 +14,12 @@ import SideBar from "../components/body/SideBar";
 export default function SinglePost() {
   return (
     <>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        sx={{ minHeight: "90vh" }}
+      >
         <Grid item lg={10}>
           <Card sx={{ ml: 1 }} variant="outlined">
             <CardMedia

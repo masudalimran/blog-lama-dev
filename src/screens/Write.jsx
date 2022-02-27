@@ -10,7 +10,7 @@ export default function Write() {
   });
   return (
     <>
-      <Grid container justifyContent="center">
+      <Grid container justifyContent="center" sx={{ minHeight: "80vh" }}>
         <Grid item>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <Grid container flexDirection="column" sx={{ mb: 2 }}>

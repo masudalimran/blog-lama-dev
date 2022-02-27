@@ -15,7 +15,9 @@ export default function TopBarMenu() {
         justifyContent="center"
         spacing={6}
         component="div"
-        sx={{ textTransform: "uppercase" }}
+        sx={{
+          textTransform: "uppercase",
+        }}
       >
         <Grid item>
           <Link href="/" underline="none">

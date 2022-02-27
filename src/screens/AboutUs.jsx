@@ -18,8 +18,12 @@ export default function AboutUs() {
           Quidem quod tenetur officia a dicta laboriosam id,
         </Typography>
       </Box>
-      <Grid container justifyContent="center" spacing={5}>
-        {/* {[...Array(3)].map((x, i) => ( */}
+      <Grid
+        container
+        justifyContent="center"
+        spacing={5}
+        sx={{ minHeight: "90vh" }}
+      >
         <Grid item>
           <Card sx={{ maxWidth: 345 }}>
             <CardMedia
@@ -101,7 +105,6 @@ export default function AboutUs() {
             </CardContent>
           </Card>
         </Grid>
-        {/* ))} */}
       </Grid>
     </>
   );

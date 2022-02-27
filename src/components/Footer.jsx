@@ -21,9 +21,9 @@ export default function Footer() {
   return (
     <>
       <Divider sx={{ background: "black", mt: 5 }} />
-      <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
-        <Grid item lg={2} sx={{ ml: 5 }}>
-          <Grid container spacing={2}>
+      <Grid container sx={{ mt: 1 }}>
+        <Grid item md={2} sx={{ ml: 7 }}>
+          <Grid container justifyContent="center">
             <Grid item>
               <img
                 src="https://picsum.photos/id/237/50/50"
@@ -40,13 +40,8 @@ export default function Footer() {
             cupiditate error! Deserunt aliquid vel, vitae est asperiores facilis
             consectetur quo. Suscipit ut iure laboriosam unde quibusdam.
           </Typography>
-          <Typography variant="body2">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo eos
-            cupiditate error! Deserunt aliquid vel, vitae est asperiores facilis
-            consectetur quo. Suscipit ut iure laboriosam unde quibusdam.
-          </Typography>
         </Grid>
-        <Grid item>
+        <Grid item md={3}>
           <Typography variant="h3">Latest Post</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -84,7 +79,7 @@ export default function Footer() {
             ))}
           </List>
         </Grid>
-        <Grid item>
+        <Grid item md={2}>
           <Typography variant="h3">Services</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -102,7 +97,7 @@ export default function Footer() {
             ))}
           </List>
         </Grid>
-        <Grid item sx={{ mr: 1 }}>
+        <Grid item md={3}>
           <Typography variant="h3">Get in touch</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -136,7 +131,6 @@ export default function Footer() {
           </List>
         </Grid>
       </Grid>
-      <Divider sx={{ background: "black" }} />
       <Typography
         variant="subtitle2"
         align="center"
