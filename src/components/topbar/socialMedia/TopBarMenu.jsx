@@ -25,28 +25,28 @@ export default function TopBarMenu() {
           </Link>
         </Grid>
         <Grid item>
-          <Link href="about-us" underline="none">
+          <Link href="/about-us" underline="none">
             <Typography variant="h6" sx={TopMenu}>
               About
             </Typography>
           </Link>
         </Grid>
         <Grid item>
-          <Link href="contact" underline="none">
+          <Link href="/contact" underline="none">
             <Typography variant="h6" sx={TopMenu}>
               Contact
             </Typography>
           </Link>
         </Grid>
         <Grid item>
-          <Link href="blog" underline="none">
+          <Link href="/blog" underline="none">
             <Typography variant="h6" sx={TopMenu}>
               Blog
             </Typography>
           </Link>
         </Grid>
         <Grid item>
-          <Link href="write-post" underline="none">
+          <Link href="/write-post" underline="none">
             <Typography variant="h6" sx={TopMenu}>
               Write Blog
             </Typography>
