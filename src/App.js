@@ -6,6 +6,7 @@ import Write from "./screens/Write";
 import AboutUs from "./screens/AboutUs";
 import Blog from "./screens/Blog";
 import ContactUs from "./screens/ContactUs";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="contact" element={<ContactUs />} />
         </Route>
       </Routes>
+      <Footer />
     </>
   );
 }

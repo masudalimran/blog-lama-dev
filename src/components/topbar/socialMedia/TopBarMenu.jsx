@@ -48,7 +48,7 @@ export default function TopBarMenu() {
         <Grid item>
           <Link href="write-post" underline="none">
             <Typography variant="h6" sx={TopMenu}>
-              Create
+              Write Blog
             </Typography>
           </Link>
         </Grid>
