@@ -20,7 +20,7 @@ import SocialMedia from "./topbar/socialMedia/SocialMedia";
 export default function Footer() {
   return (
     <>
-      <Divider sx={{ background: "black" }} />
+      <Divider sx={{ background: "black", mt: 5 }} />
       <Grid container justifyContent="space-between" sx={{ mt: 1 }}>
         <Grid item lg={2} sx={{ ml: 5 }}>
           <Grid container spacing={2}>
