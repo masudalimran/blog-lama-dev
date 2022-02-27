@@ -23,7 +23,7 @@ export default function Posts() {
         {[...Array(12)].map((x, i) => (
           <Grid item>
             <Card sx={{ maxWidth: 345 }}>
-              <Link href="single-post" underline="none">
+              <Link href="/single-post" underline="none">
                 <CardMedia
                   component="img"
                   alt={`Post number ${i + 1}`}
@@ -42,7 +42,7 @@ export default function Posts() {
               </CardContent>
               <CardActions>
                 <Button size="small">Share</Button>
-                <Link href="single-post" underline="none">
+                <Link href="/single-post" underline="none">
                   <Button variant="outlined" color="error" size="small">
                     Learn More
                   </Button>
