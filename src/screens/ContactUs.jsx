@@ -15,8 +15,8 @@ export default function ContactUs() {
       <Typography variant="h3" align="center">
         Contact Us
       </Typography>
-      <Grid container justifyContent="center" sx={{ minHeight: "70vh" }}>
-        <Grid item lg={6}>
+      <Grid container justifyContent="center">
+        <Grid item lg={6} xs={10}>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>

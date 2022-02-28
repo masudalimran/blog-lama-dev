@@ -10,18 +10,25 @@ export default function Write() {
   });
   return (
     <>
-      <Grid container justifyContent="center" sx={{ minHeight: "80vh" }}>
-        <Grid item>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
-            <Grid container flexDirection="column" sx={{ mb: 2 }}>
-              <Grid item position="relative">
+      <Grid container justifyContent="center">
+        <Grid item lg={6} xs={10}>
+          <Box component="form" noValidate>
+            <Grid
+              container
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item>
                 <img
-                  src="https://picsum.photos/seed/picsum/600/150"
+                  src="https://picsum.photos/seed/picsum/950/150"
                   alt="Halloween party"
                   width="100%"
+                  height="150px"
+                  style={{ objectFit: "cover" }}
                 />
               </Grid>
-              <Grid item position="absolute" sx={{ mt: "75px", ml: "320px" }}>
+              <Grid item position="absolute">
                 <label htmlFor="icon-button-file">
                   <Input accept="image/*" id="icon-button-file" type="file" />
                   <IconButton
@@ -34,47 +41,53 @@ export default function Write() {
                 </label>
               </Grid>
             </Grid>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Title"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Category"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-
-            <TextField
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Blog Details"
-              type="password"
-              id="password"
-              minRows="8"
-              multiline="true"
-              autoComplete="current-password"
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Publish
-            </Button>
+            <Grid item>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Title"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Category"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                margin="normal"
+                fullWidth
+                name="password"
+                label="Blog Details"
+                type="password"
+                id="password"
+                minRows="8"
+                multiline="true"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Publish
+              </Button>
+            </Grid>
           </Box>
         </Grid>
       </Grid>

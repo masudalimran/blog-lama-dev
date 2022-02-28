@@ -41,10 +41,9 @@ export default function Posts() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Share</Button>
                 <Link href="/single-post" underline="none">
                   <Button variant="outlined" color="error" size="small">
-                    Learn More
+                    Read More
                   </Button>
                 </Link>
               </CardActions>

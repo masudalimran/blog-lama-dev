@@ -7,22 +7,26 @@ import {
   Grid,
   Link,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import SideBar from "../components/body/SideBar";
 import generateWord from "../hooks/GenerateRandomWord";
 
 export default function Blog() {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("xl"));
   return (
     <>
       <Typography gutterBottom variant="h3" align="center">
         Blog Posts
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item lg={10}>
+      <Grid container spacing={2} justifyContent="center">
+        <Grid item xs={10} xl={9}>
           <Grid container spacing={2} flexDirection="column">
-            {[...Array(12)].map((x, i) => (
-              <Grid item sx={{ ml: 2 }}>
+            {[...Array(4)].map((x, i) => (
+              <Grid item>
                 <Card>
                   <CardMedia
                     component="img"
@@ -51,7 +55,7 @@ export default function Blog() {
                   <CardActions>
                     <Link href="/single-post" underline="none">
                       <Button variant="outlined" color="secondary" size="small">
-                        Learn More
+                        Read More
                       </Button>
                     </Link>
                   </CardActions>
@@ -60,8 +64,8 @@ export default function Blog() {
             ))}
           </Grid>
         </Grid>
-        <Grid item lg={2}>
-          <SideBar />
+        <Grid item md={0} xl={2}>
+          {matches && <SideBar />}
         </Grid>
       </Grid>
     </>

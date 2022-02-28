@@ -16,18 +16,22 @@ export default function Header() {
             sx={{
               fontStyle: "italic",
               fontFamily: "cursive",
+              fontSize: { xs: 32, md: 60 },
             }}
           >
             React & Node
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="h1" sx={{ fontFamily: "cursive" }}>
+          <Typography
+            variant="h1"
+            sx={{ fontFamily: "cursive", fontSize: { xs: 32, md: 60 } }}
+          >
             Blog
           </Typography>
         </Grid>
       </Grid>
-      <Box sx={{ mt: "6%" }} component="div">
+      <Box sx={{ mt: { xs: 0, md: "6%" } }} component="div">
         <img
           src="https://picsum.photos/1000/300"
           alt="Random Sobi"

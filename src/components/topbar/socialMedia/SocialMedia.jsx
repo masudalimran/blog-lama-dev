@@ -9,28 +9,28 @@ export default function SocialMedia() {
   return (
     <>
       <Grid container justifyContent="center">
-        <Grid item>
+        <Grid item sm={1} xs={2}>
           <Link href="https://www.facebook.com/masudalimran93/" target="_blank">
             <IconButton aria-label="facebook" size="small">
               <FacebookIcon fontSize="small" sx={{ color: "navy" }} />
             </IconButton>
           </Link>
         </Grid>
-        <Grid item>
+        <Grid item sm={1} xs={2}>
           <Link href="https://twitter.com/masudalimran1" target="_blank">
             <IconButton aria-label="facebook" size="small">
               <TwitterIcon fontSize="small" color="info" />
             </IconButton>
           </Link>
         </Grid>
-        <Grid item>
+        <Grid item sm={1} xs={2}>
           <Link href="https://github.com/masudalimran" target="_blank">
             <IconButton aria-label="facebook" size="small">
               <GitHubIcon fontSize="small" sx={{ color: "black" }} />
             </IconButton>
           </Link>
         </Grid>
-        <Grid item>
+        <Grid item sm={1} xs={2}>
           <Link
             href="https://www.instagram.com/elonmusk/?hl=en"
             target="_blank"

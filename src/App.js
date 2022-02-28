@@ -17,14 +17,14 @@ function App() {
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="/single-post" element={<SinglePost />} />
-          <Route path="/write-post" element={<Write />} />
           <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/write-post" element={<Write />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

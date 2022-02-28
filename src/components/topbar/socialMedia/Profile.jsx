@@ -34,7 +34,7 @@ export default function Profile() {
   return (
     <>
       <Grid container justifyContent="flex-end">
-        <Grid item lg={10}>
+        <Grid item lg={10} sx={{ width: { xs: "60%", sm: "80%" } }}>
           <Autocomplete
             freeSolo
             id="free-solo-2-demo"
