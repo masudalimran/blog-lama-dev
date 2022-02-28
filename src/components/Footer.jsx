@@ -21,18 +21,19 @@ export default function Footer() {
   return (
     <>
       <Divider sx={{ background: "black", mt: 5 }} />
-      <Grid container sx={{ mt: 1 }}>
-        <Grid item md={2} sx={{ ml: 7 }}>
-          <Grid container justifyContent="center">
+      <Grid container sx={{ mt: 1 }} justifyContent="center">
+        <Grid item xl={2}>
+          <Grid container spacing={2} justifyContent="flex-start">
             <Grid item>
               <img
                 src="https://picsum.photos/id/237/50/50"
                 alt="Logo"
                 title="Site logo"
+                style={{ borderRadius: "50%" }}
               />
             </Grid>
             <Grid item>
-              <Typography variant="h3">Site Name</Typography>
+              <Typography variant="h4">Site Name</Typography>
             </Grid>
           </Grid>
           <Typography variant="body2">
@@ -41,7 +42,8 @@ export default function Footer() {
             consectetur quo. Suscipit ut iure laboriosam unde quibusdam.
           </Typography>
         </Grid>
-        <Grid item md={3}>
+
+        <Grid item xl={2}>
           <Typography variant="h3">Latest Post</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -79,7 +81,8 @@ export default function Footer() {
             ))}
           </List>
         </Grid>
-        <Grid item md={2}>
+
+        <Grid item xl={2}>
           <Typography variant="h3">Services</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -97,7 +100,8 @@ export default function Footer() {
             ))}
           </List>
         </Grid>
-        <Grid item md={3}>
+
+        <Grid item xl={2}>
           <Typography variant="h3">Get in touch</Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
@@ -141,7 +145,7 @@ export default function Footer() {
           bottom: 0,
         }}
       >
-        Created By Masud Al Imran | All Rights Reserved | 2022{" "}
+        All Rights Reserved | Masud@2022
       </Typography>
     </>
   );

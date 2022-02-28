@@ -91,7 +91,7 @@ export default function Profile() {
                   <ListItemText primary="View Profile" />
                 </ListItemButton>
               </Link>
-              <Link href="profile" underline="none" sx={{ color: "black" }}>
+              <Link href="#" underline="none" sx={{ color: "black" }}>
                 <ListItemButton>
                   <ListItemIcon>
                     <ManageAccountsIcon size="small" />
@@ -99,7 +99,7 @@ export default function Profile() {
                   <ListItemText primary="Edit Profile" />
                 </ListItemButton>
               </Link>
-              <Link href="profile" underline="none" sx={{ color: "black" }}>
+              <Link href="#" underline="none" sx={{ color: "black" }}>
                 <ListItemButton>
                   <ListItemIcon>
                     <LogoutIcon size="small" />

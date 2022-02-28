@@ -6,12 +6,16 @@ import {
   Grid,
   IconButton,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SideBar from "../components/body/SideBar";
 
 export default function SinglePost() {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("xl"));
   return (
     <>
       <Grid
@@ -20,7 +24,7 @@ export default function SinglePost() {
         justifyContent="center"
         sx={{ minHeight: "90vh" }}
       >
-        <Grid item lg={10}>
+        <Grid item xs={11} lg={10}>
           <Card sx={{ ml: 1 }} variant="outlined">
             <CardMedia
               component="img"
@@ -98,8 +102,8 @@ export default function SinglePost() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item lg={2}>
-          <SideBar />
+        <Grid item xs={0} lg={2}>
+          {matches && <SideBar />}
         </Grid>
       </Grid>
     </>

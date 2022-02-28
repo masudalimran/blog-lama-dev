@@ -1,62 +1,94 @@
-import { Typography, Grid, Divider } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Divider,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
 import SideBar from "../components/body/SideBar";
 import generateword from "../hooks/GenerateRandomWord";
 
 export default function ProfilePage() {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up("xl"));
   return (
     <>
-      <Typography variant="h3" align="center">
-        Profile
+      <Typography
+        variant="h3"
+        align="center"
+        sx={{ fontSize: { xs: "18px", lg: "32px" } }}
+      >
+        Profile:{" "}
+        <Typography
+          variant="h3"
+          component="span"
+          sx={{ fontSize: { xs: "18px", lg: "32px" } }}
+        >
+          Masud Al Imran
+        </Typography>
       </Typography>
       <Divider variant="middle" sx={{ mb: 2, background: "navy" }} />
-      <Grid container spacing={2} sx={{ ml: 1 }} justifyContent="space-between">
-        <Grid item>
-          <img src="https://picsum.photos/300/500" alt="ProfilePicture" />
+
+      <Grid container justifyContent="space-around">
+        <Grid item xs={11} md={4} xl={2}>
+          <img
+            src="https://picsum.photos/300/500"
+            alt="ProfilePicture"
+            width="100%"
+            height="500px"
+            style={{ objectFit: "cover" }}
+          />
         </Grid>
-        <Grid item>
-          <Typography variant="h5">User Name: {generateword(22)}</Typography>
+
+        <Grid item xs={10} md={6} xl={6}>
+          <Typography variant="body1">User Name: {generateword(22)}</Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Email: {generateword(5)}@gmail.com
           </Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Address: H# DCC1, Momin Shoroni Road, North Ibrahimpur, Mirpur-14,
             Dhaka - 1206, Bangladesh
           </Typography>
           <Divider />
-          <Typography variant="h5">Religion:{generateword(5)}</Typography>
+          <Typography variant="body1">Religion:{generateword(5)}</Typography>
           <Divider />
-          <Typography variant="h5">Marital Status: Unmarried</Typography>
+          <Typography variant="body1">Marital Status: Unmarried</Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Father's Name: {generateword(22)}
           </Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Mother's Name: {generateword(22)}
           </Typography>
           <Divider />
-          <Typography variant="h5">Company Name: {generateword(22)}</Typography>
+          <Typography variant="body1">
+            Company Name: {generateword(22)}
+          </Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Other Details: {generateword(22)}
           </Typography>
           <Divider />
-          <Typography variant="h5">Occupation: {generateword(22)}</Typography>
+          <Typography variant="body1">
+            Occupation: {generateword(22)}
+          </Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Brother's Name: {generateword(22)}
           </Typography>
           <Divider />
-          <Typography variant="h5">
+          <Typography variant="body1">
             Sister's Name: {generateword(22)}
           </Typography>
           <Divider />
         </Grid>
-        <Grid item>
-          <SideBar />
+
+        <Grid item xs={0} md={0} xl={3}>
+          {matches && <SideBar />}
         </Grid>
       </Grid>
     </>
