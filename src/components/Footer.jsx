@@ -22,8 +22,13 @@ export default function Footer() {
     <>
       <Divider sx={{ background: "black", mt: 5 }} />
       <Grid container sx={{ mt: 1 }} justifyContent="center">
-        <Grid item xl={2}>
-          <Grid container spacing={2} justifyContent="flex-start">
+        <Grid item xl={2} xs={11} sm={5}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent={{ xl: "flex-start", xs: "center" }}
+            alignItems="center"
+          >
             <Grid item>
               <img
                 src="https://picsum.photos/id/237/50/50"
@@ -33,25 +38,34 @@ export default function Footer() {
               />
             </Grid>
             <Grid item>
-              <Typography variant="h4">Site Name</Typography>
+              <Typography variant="h6">Site Name</Typography>
             </Grid>
           </Grid>
-          <Typography variant="body2">
+          <Typography
+            variant="body2"
+            sx={{ textAlign: { xs: "center", xl: "left" } }}
+          >
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo eos
             cupiditate error! Deserunt aliquid vel, vitae est asperiores facilis
-            consectetur quo. Suscipit ut iure laboriosam unde quibusdam.
+            consectetur quo. Lorem ipsum dolor sit amet, consectetur adipisicing
+            elit. Nemo eos cupiditate error! Deserunt aliquid vel, vitae est
+            asperiores facilis consectetur quo. Lorem ipsum dolor sit amet,
+            consectetur adipisicing elit. Nemo eos cupiditate error! Deserunt
+            aliquid vel, vitae est asperiores facilis consectetur quo.
           </Typography>
         </Grid>
 
-        <Grid item xl={2}>
-          <Typography variant="h3">Latest Post</Typography>
+        <Grid item xl={2} xs={11} sm={5}>
+          <Typography variant="h6" align="center">
+            Latest Post
+          </Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
             {[...Array(3)].map((x, i) => (
               <>
-                <ListItem alignItems="flex-start">
+                <ListItem>
                   <ListItemAvatar>
                     <Avatar
                       alt={`Jorge Washington Dc number ${i + 1}`}
@@ -82,15 +96,18 @@ export default function Footer() {
           </List>
         </Grid>
 
-        <Grid item xl={2}>
-          <Typography variant="h3">Services</Typography>
+        <Grid item xl={2} xs={11} sm={5}>
+          <Typography variant="h6" align="center">
+            Services
+          </Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            dense
           >
             {[...Array(5)].map((x, i) => (
               <>
-                <ListItem alignItems="flex-start">
+                <ListItem>
                   <ListItemIcon>
                     <ArrowRightIcon />
                   </ListItemIcon>
@@ -101,19 +118,22 @@ export default function Footer() {
           </List>
         </Grid>
 
-        <Grid item xl={2}>
-          <Typography variant="h3">Get in touch</Typography>
+        <Grid item xl={2} xs={11} sm={5}>
+          <Typography variant="h6" align="center">
+            Get in touch
+          </Typography>
           <Divider variant="inset" sx={{ background: "black" }} />
           <List
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            dense
           >
-            <ListItem alignItems="flex-start">
+            <ListItem>
               <ListItemIcon>
                 <LocalPhoneIcon />
                 <ListItemText primary="+880 1315686147" sx={{ ml: 2 }} />
               </ListItemIcon>
             </ListItem>
-            <ListItem alignItems="flex-start">
+            <ListItem>
               <ListItemIcon>
                 <MailOutlineIcon />
                 <ListItemText
@@ -122,13 +142,14 @@ export default function Footer() {
                 />
               </ListItemIcon>
             </ListItem>
-            <ListItem alignItems="flex-start">
+            <ListItem>
               <ListItemIcon>
                 <ContactMailIcon />
                 <ListItemText
-                  primary="Office: H# DCC1, Momin Shoroni Road, North Ibrahimpur, Mirpur-14, Dhaka - 1206, Bangladesh"
-                  sx={{ ml: 2, maxWidth: "40%", mt: -0.1 }}
+                  primary="Office: Mirpur-14, Dhaka - 1206"
+                  sx={{ ml: 2, mt: -0.1 }}
                 />
+                <Typography sx={{ ml: 2, mt: -0.1 }}></Typography>
               </ListItemIcon>
             </ListItem>
             <SocialMedia />
