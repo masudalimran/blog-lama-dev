@@ -5,13 +5,24 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import SideBar from "../../components/body/SideBar";
 import generateword from "../../hooks/GenerateRandomWord";
 
 export default function ProfilePage() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const x = localStorage.getItem("loginInfo");
+    if (x !== "true") {
+      navigate("/");
+    } else {
+    }
+  }, []);
   return (
     <>
       <Typography

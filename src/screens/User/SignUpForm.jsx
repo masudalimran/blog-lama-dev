@@ -29,6 +29,7 @@ export default function SignUpForm({
     });
     setOpenRegister(false);
     setLogStatus(true);
+    localStorage.setItem("loginInfo", true);
     setOpen(false);
   };
 

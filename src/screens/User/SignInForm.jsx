@@ -38,6 +38,7 @@ export default function SignInForm({
     });
     setOpenLogin(false);
     setLogStatus(true);
+    localStorage.setItem("loginInfo", true);
     setOpen(false);
   };
 

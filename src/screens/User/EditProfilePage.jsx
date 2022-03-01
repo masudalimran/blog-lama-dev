@@ -1,12 +1,24 @@
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { styled } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function EditProfilePage() {
   const Input = styled("input")({
     display: "none",
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const x = localStorage.getItem("loginInfo");
+    if (x !== "true") {
+      navigate("/");
+    } else {
+    }
+  }, []);
+
   return (
     <>
       <Grid container justifyContent="center">

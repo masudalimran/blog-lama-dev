@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
-import { useState } from "react";
+import { useContext } from "react";
+import DataContext from "../../Context/DataContext";
 import Profile from "./socialMedia/Profile";
 import SocialMedia from "./socialMedia/SocialMedia";
 import TopBarMenu from "./socialMedia/TopBarMenu";
 
 export default function TopBar() {
-  const [logStatus, setLogStatus] = useState(false);
-
+  const { logStatus, setLogStatus } = useContext(DataContext);
   return (
     <>
       <Grid

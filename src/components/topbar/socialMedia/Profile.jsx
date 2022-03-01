@@ -21,6 +21,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useState } from "react";
 import SignInDialogue from "../../../screens/User/SignInDialogue";
 import SignUpDialogue from "../../../screens/User/SignUpDialogue";
+import { useNavigate } from "react-router-dom";
 
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },
@@ -39,6 +40,13 @@ export default function Profile({ logStatus, setLogStatus }) {
 
   const handleClickOpen = () => {
     setOpenLogin(true);
+  };
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    setLogStatus(false);
+    localStorage.removeItem("loginInfo");
+    navigate("/");
   };
 
   return (
@@ -117,7 +125,7 @@ export default function Profile({ logStatus, setLogStatus }) {
                     <ListItemText primary="Edit Profile" />
                   </ListItemButton>
                 </Link>
-                <ListItemButton onClick={() => setLogStatus(false)}>
+                <ListItemButton onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon size="small" />
                   </ListItemIcon>
