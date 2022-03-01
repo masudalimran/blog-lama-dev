@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -12,12 +13,20 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SideBar from "../components/body/SideBar";
+import { useNavigate } from "react-router-dom";
 
 export default function SinglePost() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
   return (
     <>
+      <Button variant="text" size="small" sx={{ m: 1 }} onClick={handleBack}>
+        Back
+      </Button>
       <Grid
         container
         spacing={2}

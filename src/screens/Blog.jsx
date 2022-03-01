@@ -53,7 +53,7 @@ export default function Blog() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Link href="/single-post" underline="none">
+                    <Link href={`/single-post/${i}`} underline="none">
                       <Button variant="outlined" color="secondary" size="small">
                         Read More
                       </Button>
