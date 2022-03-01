@@ -10,9 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
   Link,
-  Typography,
-  useTheme,
-  useMediaQuery,
 } from "@mui/material";
 
 import InputAdornment from "@mui/material/InputAdornment";
@@ -36,8 +33,6 @@ const top100Films = [
 ];
 
 export default function Profile({ logStatus, setLogStatus }) {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("xl"));
   const [open, setOpen] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
@@ -122,46 +117,25 @@ export default function Profile({ logStatus, setLogStatus }) {
                     <ListItemText primary="Edit Profile" />
                   </ListItemButton>
                 </Link>
-                {/* <Link href="#" underline="none" sx={{ color: "black" }}> */}
                 <ListItemButton onClick={() => setLogStatus(false)}>
                   <ListItemIcon>
                     <LogoutIcon size="small" />
                   </ListItemIcon>
                   <ListItemText primary="Logout" />
                 </ListItemButton>
-                {/* </Link> */}
               </List>
             </Dialog>
           </Grid>
         ) : (
-          <>
-            {matches ? (
-              <Grid item sx={{ mr: 2 }}>
-                <Typography
-                  variant="h6"
-                  onClick={handleClickOpen}
-                  sx={{
-                    "&:hover": {
-                      color: "red",
-                    },
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                >
-                  Login / Register
-                </Typography>
-              </Grid>
-            ) : (
-              <Grid item>
-                <IconButton
-                  aria-label="login-register"
-                  onClick={handleClickOpen}
-                >
-                  <PersonIcon sx={{ color: "black" }} />
-                </IconButton>
-              </Grid>
-            )}
-          </>
+          <Grid item>
+            <IconButton
+              aria-label="login-register"
+              onClick={handleClickOpen}
+              title="Login/ Register"
+            >
+              <PersonIcon sx={{ color: "black" }} />
+            </IconButton>
+          </Grid>
         )}
       </Grid>
 
