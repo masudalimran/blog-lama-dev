@@ -12,7 +12,7 @@ export default function Write() {
     <>
       <Grid container justifyContent="center">
         <Grid item lg={6} xs={10}>
-          <Box component="form" noValidate>
+          <Box component="form" noValidate onSubmit={(e) => e.preventDefault()}>
             <Grid
               container
               flexDirection="column"
@@ -46,10 +46,10 @@ export default function Write() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="title"
                 label="Title"
-                name="email"
-                autoComplete="email"
+                name="title"
+                autoComplete="title"
                 autoFocus
               />
             </Grid>
@@ -58,24 +58,22 @@ export default function Write() {
                 margin="normal"
                 required
                 fullWidth
-                name="password"
+                name="category"
                 label="Category"
-                type="password"
-                id="password"
-                autoComplete="current-password"
+                id="category"
+                autoComplete="category"
               />
             </Grid>
             <Grid item>
               <TextField
                 margin="normal"
                 fullWidth
-                name="password"
+                name="details"
                 label="Blog Details"
-                type="password"
-                id="password"
+                id="details"
                 minRows="8"
                 multiline="true"
-                autoComplete="current-password"
+                autoComplete="details"
               />
             </Grid>
             <Grid item>

@@ -1,9 +1,12 @@
 import { Grid } from "@mui/material";
+import { useState } from "react";
 import Profile from "./socialMedia/Profile";
 import SocialMedia from "./socialMedia/SocialMedia";
 import TopBarMenu from "./socialMedia/TopBarMenu";
 
 export default function TopBar() {
+  const [logStatus, setLogStatus] = useState(true);
+
   return (
     <>
       <Grid
@@ -19,7 +22,7 @@ export default function TopBar() {
           <TopBarMenu />
         </Grid>
         <Grid item lg={3} xs={6}>
-          <Profile />
+          <Profile logStatus={logStatus} setLogStatus={setLogStatus} />
         </Grid>
       </Grid>
     </>

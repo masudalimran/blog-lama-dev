@@ -21,7 +21,7 @@ export default function Posts() {
       <Divider variant="middle" sx={{ mb: 1, backgroundColor: "red" }} />
       <Grid container spacing={4} justifyContent="center" sx={{ mb: 2 }}>
         {[...Array(12)].map((x, i) => (
-          <Grid item>
+          <Grid item key={i}>
             <Card sx={{ maxWidth: 345 }}>
               <Link href="/single-post" underline="none">
                 <CardMedia

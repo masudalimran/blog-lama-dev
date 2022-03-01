@@ -7,7 +7,8 @@ import AboutUs from "./screens/AboutUs";
 import Blog from "./screens/Blog";
 import ContactUs from "./screens/ContactUs";
 import Footer from "./components/Footer";
-import ProfilePage from "./screens/ProfilePage";
+import ProfilePage from "./screens/User/ProfilePage";
+import EditProfilePage from "./screens/User/EditProfilePage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/write-post" element={<Write />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/edit-profile" element={<EditProfilePage />} />
         </Route>
       </Routes>
       <Footer />

@@ -6,8 +6,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
-import SideBar from "../components/body/SideBar";
-import generateword from "../hooks/GenerateRandomWord";
+import SideBar from "../../components/body/SideBar";
+import generateword from "../../hooks/GenerateRandomWord";
 
 export default function ProfilePage() {
   const theme = useTheme();
