@@ -17,7 +17,7 @@ export default function EditProfilePage() {
       navigate("/");
     } else {
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <>

@@ -22,7 +22,7 @@ export default function ProfilePage() {
       navigate("/");
     } else {
     }
-  }, []);
+  }, [navigate]);
   return (
     <>
       <Typography
