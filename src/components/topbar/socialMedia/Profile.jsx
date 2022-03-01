@@ -18,10 +18,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SignInDialogue from "../../../screens/User/SignInDialogue";
 import SignUpDialogue from "../../../screens/User/SignUpDialogue";
 import { useNavigate } from "react-router-dom";
+import DataContext from "../../../Context/DataContext";
 
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },
@@ -35,8 +36,8 @@ const top100Films = [
 
 export default function Profile({ logStatus, setLogStatus }) {
   const [open, setOpen] = useState(false);
-  const [openLogin, setOpenLogin] = useState(false);
-  const [openRegister, setOpenRegister] = useState(false);
+  const { openLogin, setOpenLogin, openRegister, setOpenRegister } =
+    useContext(DataContext);
 
   const handleClickOpen = () => {
     setOpenLogin(true);

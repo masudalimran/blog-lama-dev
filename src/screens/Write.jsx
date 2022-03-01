@@ -3,16 +3,28 @@ import { Box } from "@mui/system";
 import { styled } from "@mui/material/styles";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { useContext } from "react";
+import DataContext from "../Context/DataContext";
 
 export default function Write() {
   const Input = styled("input")({
     display: "none",
   });
+
+  const { setOpenLogin } = useContext(DataContext);
+  const handlePublishBlog = (e) => {
+    e.preventDefault();
+    const x = localStorage.getItem("loginInfo");
+    if (x !== "true") {
+      setOpenLogin(true);
+    } else {
+    }
+  };
   return (
     <>
       <Grid container justifyContent="center">
         <Grid item lg={6} xs={10}>
-          <Box component="form" noValidate onSubmit={(e) => e.preventDefault()}>
+          <Box component="form" noValidate onSubmit={handlePublishBlog}>
             <Grid
               container
               flexDirection="column"
