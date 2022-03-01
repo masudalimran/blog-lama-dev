@@ -5,7 +5,7 @@ import SocialMedia from "./socialMedia/SocialMedia";
 import TopBarMenu from "./socialMedia/TopBarMenu";
 
 export default function TopBar() {
-  const [logStatus, setLogStatus] = useState(true);
+  const [logStatus, setLogStatus] = useState(false);
 
   return (
     <>
