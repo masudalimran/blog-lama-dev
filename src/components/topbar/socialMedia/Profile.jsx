@@ -48,32 +48,32 @@ export default function Profile({ logStatus, setLogStatus }) {
 
   return (
     <>
-      {logStatus === true ? (
-        <Grid container justifyContent="flex-end">
-          <Grid item lg={10} sx={{ width: { xs: "60%", sm: "80%" } }}>
-            <Autocomplete
-              freeSolo
-              id="free-solo-2-demo"
-              disableClearable
-              options={top100Films.map((option) => option.title)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  InputProps={{
-                    ...params.InputProps,
-                    type: "search",
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="standard"
-                  size="small"
-                />
-              )}
-            />
-          </Grid>
+      <Grid container justifyContent="flex-end">
+        <Grid item lg={10} sx={{ width: { xs: "60%", sm: "80%" } }}>
+          <Autocomplete
+            freeSolo
+            id="free-solo-2-demo"
+            disableClearable
+            options={top100Films.map((option) => option.title)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  type: "search",
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="standard"
+                size="small"
+              />
+            )}
+          />
+        </Grid>
+        {logStatus === true ? (
           <Grid item lg={2}>
             <IconButton
               aria-label="profile-avatar"
@@ -133,34 +133,38 @@ export default function Profile({ logStatus, setLogStatus }) {
               </List>
             </Dialog>
           </Grid>
-        </Grid>
-      ) : (
-        <Grid container justifyContent="flex-end" alignItems="center">
-          {matches ? (
-            <Grid item sx={{ mr: 2 }}>
-              <Typography
-                variant="h6"
-                onClick={handleClickOpen}
-                sx={{
-                  "&:hover": {
-                    color: "red",
-                  },
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-              >
-                Login / Register
-              </Typography>
-            </Grid>
-          ) : (
-            <Grid item>
-              <IconButton aria-label="login-register" onClick={handleClickOpen}>
-                <PersonIcon sx={{ color: "black" }} />
-              </IconButton>
-            </Grid>
-          )}
-        </Grid>
-      )}
+        ) : (
+          <>
+            {matches ? (
+              <Grid item sx={{ mr: 2 }}>
+                <Typography
+                  variant="h6"
+                  onClick={handleClickOpen}
+                  sx={{
+                    "&:hover": {
+                      color: "red",
+                    },
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  Login / Register
+                </Typography>
+              </Grid>
+            ) : (
+              <Grid item>
+                <IconButton
+                  aria-label="login-register"
+                  onClick={handleClickOpen}
+                >
+                  <PersonIcon sx={{ color: "black" }} />
+                </IconButton>
+              </Grid>
+            )}
+          </>
+        )}
+      </Grid>
+
       <SignInDialogue
         openLogin={openLogin}
         setOpenLogin={setOpenLogin}
