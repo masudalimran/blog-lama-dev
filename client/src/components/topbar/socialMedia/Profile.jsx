@@ -10,6 +10,11 @@ import {
   ListItemIcon,
   ListItemText,
   Link,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 
 import InputAdornment from "@mui/material/InputAdornment";
@@ -39,6 +44,7 @@ export default function Profile({ logStatus, setLogStatus }) {
   const { openLogin, setOpenLogin, openRegister, setOpenRegister } =
     useContext(DataContext);
 
+  const [openLogOutConfirm, setOpenLogOutConfirm] = useState(false);
   const handleClickOpen = () => {
     setOpenLogin(true);
   };
@@ -47,6 +53,7 @@ export default function Profile({ logStatus, setLogStatus }) {
   const handleLogout = () => {
     setLogStatus(false);
     localStorage.removeItem("loginInfo");
+    setOpenLogOutConfirm(false);
     navigate("/");
   };
 
@@ -126,7 +133,12 @@ export default function Profile({ logStatus, setLogStatus }) {
                     <ListItemText primary="Edit Profile" />
                   </ListItemButton>
                 </Link>
-                <ListItemButton onClick={handleLogout}>
+                <ListItemButton
+                  onClick={() => {
+                    setOpenLogOutConfirm(true);
+                    setOpen(false);
+                  }}
+                >
                   <ListItemIcon>
                     <LogoutIcon size="small" />
                   </ListItemIcon>
@@ -147,6 +159,22 @@ export default function Profile({ logStatus, setLogStatus }) {
           </Grid>
         )}
       </Grid>
+      <Dialog
+        open={openLogOutConfirm}
+        onClose={() => setOpenLogOutConfirm(false)}
+      >
+        <DialogContent>
+          <DialogContentText>Do you Really Want To Log Out?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setOpenLogOutConfirm(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} color="error">
+            Log Out
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <SignInDialogue
         openLogin={openLogin}
