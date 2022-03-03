@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   ListItemText,
   Link,
-  DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
