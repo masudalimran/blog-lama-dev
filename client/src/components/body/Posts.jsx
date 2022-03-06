@@ -5,11 +5,13 @@ import {
   Grid,
   CardActions,
   CardContent,
-  CardMedia,
+  // CardMedia,
   Divider,
   Link,
 } from "@mui/material";
 import generateWord from "../../hooks/GenerateRandomWord";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 export default function Posts() {
   return (
@@ -24,12 +26,14 @@ export default function Posts() {
           <Grid item key={i}>
             <Card sx={{ maxWidth: 345 }}>
               <Link href={`/single-post/${i}`} underline="none">
-                <CardMedia
-                  component="img"
+                <LazyLoadImage
                   alt={`Post number ${i + 1}`}
+                  effect="blur"
                   title={`Post number ${i + 1}`}
+                  width="100%"
                   height="140"
-                  image={`https://picsum.photos/id/${i + 310}/500/300`}
+                  src={`https://picsum.photos/id/${i + 310}/500/300`}
+                  style={{ objectFit: "cover" }}
                 />
               </Link>
               <CardContent>
