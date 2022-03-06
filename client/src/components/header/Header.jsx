@@ -1,7 +1,5 @@
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
 
 export default function Header() {
   return (
@@ -34,11 +32,10 @@ export default function Header() {
         </Grid>
       </Grid>
       <Box sx={{ mt: { xs: 0, md: "6%" } }} component="div">
-        <LazyLoadImage
+        <img
           src="https://picsum.photos/1000/300"
           alt="Random Sobi"
           width="100%"
-          effect="blur"
         />
       </Box>
     </>
