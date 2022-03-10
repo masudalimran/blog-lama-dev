@@ -8,15 +8,16 @@ const postSchema = new mongoose.Schema(
       type: String,
       default: "https://picsum.photos/500/300",
     },
-    username: {
-      type: Schema.Types.ObjectId,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    category: {
-      type: Schema.Types.ObjectId,
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: true,
+      default: "Uncategorized",
     },
     fullPost: String,
   },
@@ -25,4 +26,5 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
+export default Post;

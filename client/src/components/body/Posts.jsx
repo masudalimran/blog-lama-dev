@@ -5,7 +5,6 @@ import {
   Grid,
   CardActions,
   CardContent,
-  // CardMedia,
   Divider,
   Link,
 } from "@mui/material";

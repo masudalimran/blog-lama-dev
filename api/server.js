@@ -6,6 +6,9 @@ import { fileURLToPath } from "url";
 import {} from "dotenv/config";
 import mongoose from "mongoose";
 import authRouter from "./routes/Auth.js";
+import userRouter from "./routes/UserRoute.js";
+import postRouter from "./routes/PostRoute.js";
+import categoryRouter from "./routes/CategoryRoute.js";
 // Port define
 const PORT = process.env.PORT || "3378";
 
@@ -37,6 +40,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
+app.use("/api/category", categoryRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
