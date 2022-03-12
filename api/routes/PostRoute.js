@@ -1,4 +1,5 @@
 import { Router } from "express";
+import Category from "../models/CategoryModel.js";
 import Post from "../models/PostsModel.js";
 import User from "../models/UsersModel.js";
 import { checkIfIdValid } from "../utility.js";
@@ -22,7 +23,7 @@ postRouter.post("/", async (req, res) => {
   }
 });
 
-// Get Post
+// Get Single Post
 postRouter.get("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id))
     res.status(401).json({ message: "ID invalid contains > 24 character" });
@@ -40,11 +41,47 @@ postRouter.get("/:id", async (req, res) => {
   }
 });
 
-// Get All Post
+// Get All || Post By User || Post By Category
 postRouter.get("/", async (req, res) => {
-  const allPosts = await Post.find();
-  const postCount = Object.keys(allPosts).length;
-  res.json({ posts: allPosts, postCount });
+  const userId = req.query.user;
+  const categoryId = req.query.category;
+  if (userId) {
+    if (!checkIfIdValid(userId))
+      res.status(401).json({ message: "Invalid ID!" });
+    else {
+      const userExists = await User.findById(userId);
+      if (userExists) {
+        try {
+          const postByUser = await Post.find({ userId });
+          res.json(postByUser);
+        } catch (error) {
+          res.status(500).json(error.message);
+        }
+      } else {
+        res.status(401).json({ message: "No such post exist!" });
+      }
+    }
+  } else if (categoryId) {
+    if (!checkIfIdValid(categoryId))
+      res.status(401).json({ message: "Invalid ID!" });
+    else {
+      const categoryExists = await Category.findById(categoryId);
+      if (categoryExists) {
+        try {
+          const postByCat = await Post.find({
+            categoryId: categoryId,
+          });
+          res.json(postByCat);
+        } catch (error) {
+          res.status(500).json(error.message);
+        }
+      } else res.status(401).json({ message: "Category Does Not Exist!" });
+    }
+  } else {
+    const allPosts = await Post.find();
+    const postCount = Object.keys(allPosts).length;
+    res.json({ posts: allPosts, postCount });
+  }
 });
 
 // Update Post
