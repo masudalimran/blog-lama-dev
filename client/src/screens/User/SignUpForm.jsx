@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,6 +11,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../../Redux/features/user";
+import { Alert } from "@mui/material";
+import Loading from "../../components/alerts/Loading";
 
 const theme = createTheme();
 
@@ -20,18 +24,41 @@ export default function SignUpForm({
   setLogStatus,
   setOpen,
 }) {
+  // States
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [subscriber, setSubscriber] = useState(false);
+
+  // Store
+  const { data, status, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  // Functions
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    setOpenRegister(false);
-    setLogStatus(true);
-    localStorage.setItem("loginInfo", true);
-    setOpen(false);
+    dispatch(
+      registerUser({
+        username: firstName.concat(" ", lastName),
+        email,
+        password,
+        subscriber,
+      })
+    );
   };
+
+  useEffect(() => {
+    if (!data.message && data.username && !error) {
+      setOpenRegister(false);
+      setLogStatus(true);
+      localStorage.setItem(
+        "loginInfo",
+        JSON.stringify({ username: data.username, email: data.email })
+      );
+      setOpen(false);
+    }
+  }, [data]);
 
   const handleLogin = () => {
     setOpenRegister(false);
@@ -65,54 +92,56 @@ export default function SignUpForm({
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
                   required
                   fullWidth
-                  id="firstName"
                   label="First Name"
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
                   label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
                   label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
                   label="Password"
                   type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
+                    <Checkbox
+                      value={subscriber}
+                      color="primary"
+                      onChange={(e) => setSubscriber(e.target.checked)}
+                    />
                   }
                   label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
+            {status === "loading" ? (
+              <Loading />
+            ) : (
+              data.message && <Alert severity="error">{data.message}</Alert>
+            )}
             <Button
               type="submit"
               fullWidth

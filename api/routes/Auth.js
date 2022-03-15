@@ -14,21 +14,24 @@ authRouter.post("/register", async (req, res) => {
     const emailExist = await User.findOne({ email: req.body.email });
     const usernameExist = await User.findOne({ username: req.body.username });
     if (usernameExist)
-      res.status(500).json({ message: "Username already exist" });
+      res.status(201).json({ message: "Username already exist" });
     else if (emailExist)
-      res.status(500).json({ message: "Email already exist" });
+      res.status(201).json({ message: "Email already exist" });
     else {
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, salt),
         profilePic: req.body.profilePic,
+        subscriber: req.body.subscriber,
       });
       const user = await newUser.save();
-      res.json(user);
+      //   Skipping password field as response to user
+      const { password, ...others } = user._doc;
+      res.json(others);
     }
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -41,10 +44,10 @@ authRouter.post("/login", async (req, res) => {
         //   Skipping password field as response to user
         const { password, ...others } = user._doc;
         res.send(others);
-      } else res.status(400).json({ message: "Invalid Password" });
-    } else res.status(400).json({ message: "Invalid Email" });
+      } else res.status(201).json({ message: "Invalid Password" });
+    } else res.status(201).json({ message: "Invalid Email" });
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(500).json({ message: error.message });
   }
 });
 

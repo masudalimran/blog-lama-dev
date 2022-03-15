@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://picsum.photos/50/50",
     },
+    subscriber: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

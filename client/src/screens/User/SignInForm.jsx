@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,12 +12,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  Alert,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../Redux/features/user";
+import Loading from "../../components/alerts/Loading";
 
 const theme = createTheme();
 
@@ -27,20 +31,34 @@ export default function SignInForm({
   setLogStatus,
   setOpen,
 }) {
-  const [forgotOpen, setForgotOpen] = React.useState(false);
+  // State
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+
+  // Store
+  const dispatch = useDispatch();
+  const { data, status, error } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    setOpenLogin(false);
-    setLogStatus(true);
-    localStorage.setItem("loginInfo", true);
-    setOpen(false);
+    dispatch(loginUser({ email, password: pass }));
   };
+
+  useEffect(() => {
+    if (!data.message && data.username && !error) {
+      setOpenLogin(false);
+      setLogStatus(true);
+      localStorage.setItem(
+        "loginInfo",
+        JSON.stringify({
+          username: data.username,
+          email: data.email,
+        })
+      );
+      setOpen(false);
+    }
+  }, [data]);
 
   const handleRegister = () => {
     setOpenLogin(false);
@@ -71,32 +89,34 @@ export default function SignInForm({
           <Box
             component="form"
             onSubmit={handleSubmit}
-            noValidate
+            // noValidate
             sx={{ mt: 1 }}
           >
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
               label="Email Address"
-              name="email"
-              autoComplete="email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
               label="Password"
               type="password"
-              id="password"
-              autoComplete="current-password"
+              onChange={(e) => setPass(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+            {status === "loading" ? (
+              <Loading />
+            ) : (
+              data.message && <Alert severity="error">{data.message}</Alert>
+            )}
             <Button
               type="submit"
               fullWidth

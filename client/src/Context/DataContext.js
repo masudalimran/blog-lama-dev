@@ -6,8 +6,7 @@ export const DataProvider = ({ children }) => {
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
   useEffect(() => {
-    const x = localStorage.getItem("loginInfo");
-    if (x === "true") {
+    if (localStorage.getItem("loginInfo")) {
       setLogStatus(true);
     } else {
       setLogStatus(false);
