@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Grid from "@mui/material/Grid";
@@ -37,7 +36,7 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
   const { setSnackBarLogin } = useContext(DataContext);
 
   // Store
-  const { data, status, error } = useSelector((state) => state.user);
+  const { data, pending, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   // Functions
@@ -51,15 +50,15 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
         subscriber,
       })
     );
-    setSnackBarLogin(true);
   };
 
   useEffect(() => {
-    if (!data.message && data.username && !error) {
+    if (data.username) {
       setOpenRegister(false);
       setOpen(false);
+      setSnackBarLogin(true);
     }
-  }, [data, error]);
+  }, [data]);
 
   useEffect(() => {
     if (rePassword.length <= password.length) {
@@ -179,10 +178,12 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
                 />
               </Grid>
             </Grid>
-            {status === "loading" ? (
+            {pending ? (
               <Loading />
+            ) : data.message ? (
+              <Alert severity="error">{data.message}</Alert>
             ) : (
-              data.message && <Alert severity="error">{data.message}</Alert>
+              error && <Alert severity="error">Something Went Wrong...</Alert>
             )}
             <Button
               type="submit"

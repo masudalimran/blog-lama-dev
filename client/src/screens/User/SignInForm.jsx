@@ -37,20 +37,20 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
 
   // Store
   const dispatch = useDispatch();
-  const { data, status, error } = useSelector((state) => state.user);
+  const { data, pending, error } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(loginUser({ email, password: pass }));
-    setSnackBarLogin(true);
   };
 
   useEffect(() => {
-    if (!data.message && data.username && !error) {
+    if (data.username) {
       setOpenLogin(false);
       setOpen(false);
+      setSnackBarLogin(true);
     }
-  }, [data, error]);
+  }, [data]);
 
   const handleRegister = () => {
     setOpenLogin(false);
@@ -99,10 +99,12 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            {status === "loading" ? (
+            {pending ? (
               <Loading />
+            ) : data.message ? (
+              <Alert severity="error">{data.message}</Alert>
             ) : (
-              data.message && <Alert severity="error">{data.message}</Alert>
+              error && <Alert severity="error">Something Went Wrong...</Alert>
             )}
             <Button
               type="submit"

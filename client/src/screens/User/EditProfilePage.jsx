@@ -53,7 +53,6 @@ export default function EditProfilePage() {
 
   // Store
   const { data, status, error } = useSelector((state) => state.user);
-  console.log(data);
   useEffect(() => {
     if (!localStorage.getItem("loginInfo")) navigate("/");
     if (data.username) setUpdateSnackBar(true);
@@ -279,8 +278,10 @@ export default function EditProfilePage() {
             </Grid>
             {status === "loading" ? (
               <Loading />
+            ) : data.message ? (
+              <Alert severity="error">{data}</Alert>
             ) : (
-              !data.username && <Alert severity="error">{data}</Alert>
+              error && <Alert severity="error">"SomeThing Went wrong"</Alert>
             )}
 
             <Grid item>

@@ -65,7 +65,7 @@ export default function Profile() {
 
   // Store
   const dispatch = useDispatch();
-  const { data, status } = useSelector((state) => state.user);
+  const { pending } = useSelector((state) => state.user);
 
   // Functions
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export default function Profile() {
 
   return (
     <>
-      {status === "loading" ? (
+      {pending ? (
         <Loading />
       ) : (
         <Grid container justifyContent="flex-end">
@@ -192,37 +192,34 @@ export default function Profile() {
               </IconButton>
             </Grid>
           )}
-          {data.username ? (
-            <Snackbar
-              open={snackBarLogin}
-              autoHideDuration={5000}
+          <Snackbar
+            open={snackBarLogin}
+            autoHideDuration={5000}
+            onClose={() => setSnackBarLogin(false)}
+          >
+            <Alert
+              variant="filled"
               onClose={() => setSnackBarLogin(false)}
+              severity="success"
+              sx={{ width: "100%", mb: 3 }}
             >
-              <Alert
-                variant="filled"
-                onClose={() => setSnackBarLogin(false)}
-                severity="success"
-                sx={{ width: "100%", mb: 3 }}
-              >
-                Login Successful
-              </Alert>
-            </Snackbar>
-          ) : (
-            <Snackbar
-              open={snackBarLogout}
-              autoHideDuration={5000}
+              Login Successful
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={snackBarLogout}
+            autoHideDuration={5000}
+            onClose={() => setSnackBarLogout(false)}
+          >
+            <Alert
+              variant="filled"
               onClose={() => setSnackBarLogout(false)}
+              severity="warning"
+              sx={{ width: "100%", mb: 3 }}
             >
-              <Alert
-                variant="filled"
-                onClose={() => setSnackBarLogout(false)}
-                severity="warning"
-                sx={{ width: "100%", mb: 3 }}
-              >
-                Logout Successful
-              </Alert>
-            </Snackbar>
-          )}
+              Logout Successful
+            </Alert>
+          </Snackbar>
         </Grid>
       )}
       <Dialog
