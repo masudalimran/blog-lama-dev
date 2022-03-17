@@ -18,7 +18,6 @@ export default function SignInDialogue({
   openLogin,
   setOpenLogin,
   setOpenRegister,
-  setLogStatus,
   setOpen,
 }) {
   const handleClose = () => {
@@ -50,7 +49,6 @@ export default function SignInDialogue({
         <SignInForm
           setOpenLogin={setOpenLogin}
           setOpenRegister={setOpenRegister}
-          setLogStatus={setLogStatus}
           setOpen={setOpen}
         />
       </Dialog>

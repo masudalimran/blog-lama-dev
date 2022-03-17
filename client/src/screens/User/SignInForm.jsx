@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,19 +22,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Redux/features/user";
 import Loading from "../../components/alerts/Loading";
+import DataContext from "../../Context/DataContext";
 
 const theme = createTheme();
 
-export default function SignInForm({
-  setOpenLogin,
-  setOpenRegister,
-  setLogStatus,
-  setOpen,
-}) {
+export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
   // State
   const [forgotOpen, setForgotOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+
+  // Data context
+  const { setSnackBarLogin } = useContext(DataContext);
 
   // Store
   const dispatch = useDispatch();
@@ -43,22 +42,15 @@ export default function SignInForm({
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(loginUser({ email, password: pass }));
+    setSnackBarLogin(true);
   };
 
   useEffect(() => {
     if (!data.message && data.username && !error) {
       setOpenLogin(false);
-      setLogStatus(true);
-      localStorage.setItem(
-        "loginInfo",
-        JSON.stringify({
-          username: data.username,
-          email: data.email,
-        })
-      );
       setOpen(false);
     }
-  }, [data]);
+  }, [data, error]);
 
   const handleRegister = () => {
     setOpenLogin(false);
@@ -86,12 +78,7 @@ export default function SignInForm({
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            // noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required

@@ -18,7 +18,6 @@ export default function SignUpDialogue({
   openRegister,
   setOpenRegister,
   setOpenLogin,
-  setLogStatus,
   setOpen,
 }) {
   const handleClose = () => {
@@ -50,7 +49,6 @@ export default function SignUpDialogue({
         <SignUpForm
           setOpenRegister={setOpenRegister}
           setOpenLogin={setOpenLogin}
-          setLogStatus={setLogStatus}
           setOpen={setOpen}
         />
       </Dialog>

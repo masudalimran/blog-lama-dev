@@ -44,12 +44,19 @@ const top100Films = [
   { title: "Pulp Fiction", year: 1994 },
 ];
 
-export default function Profile({ logStatus, setLogStatus }) {
+export default function Profile() {
   // States
   const [open, setOpen] = useState(false);
-  const { openLogin, setOpenLogin, openRegister, setOpenRegister } =
-    useContext(DataContext);
-  const [errorOpen, setErrorOpen] = useState(true);
+  const {
+    openLogin,
+    setOpenLogin,
+    openRegister,
+    setOpenRegister,
+    snackBarLogin,
+    setSnackBarLogin,
+  } = useContext(DataContext);
+  const [snackBarLogout, setSnackBarLogout] = useState(false);
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
 
   const [openLogOutConfirm, setOpenLogOutConfirm] = useState(false);
   const handleClickOpen = () => {
@@ -64,17 +71,11 @@ export default function Profile({ logStatus, setLogStatus }) {
   const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
-    setLogStatus(false);
     localStorage.removeItem("loginInfo");
     setOpenLogOutConfirm(false);
+    setSnackBarLogout(true);
     navigate("/");
   };
-
-  useEffect(() => {
-    if (data.message) {
-      setErrorOpen(true);
-    }
-  }, [data.message]);
 
   return (
     <>
@@ -106,7 +107,7 @@ export default function Profile({ logStatus, setLogStatus }) {
               )}
             />
           </Grid>
-          {logStatus === true ? (
+          {localStorage.getItem("loginInfo") ? (
             <Grid item lg={2}>
               <IconButton
                 aria-label="profile-avatar"
@@ -115,7 +116,7 @@ export default function Profile({ logStatus, setLogStatus }) {
               >
                 <Avatar
                   alt="Profile"
-                  src="https://mui.com//static/images/avatar/1.jpg"
+                  src={localData.profilePic}
                   sx={{ width: 28, height: 28 }}
                 />
               </IconButton>
@@ -136,11 +137,9 @@ export default function Profile({ logStatus, setLogStatus }) {
                   dense
                   subheader={
                     <ListSubheader align="center">{`${
-                      data && data.username
-                        ? data.username.split(" ", 1)
-                        : "Guest"
-                    } - ${
-                      (data && data.email) || "Guest@example.com"
+                      localData.username
+                        ? "Hello, " + localData.username.split(" ", 1)
+                        : "Hello, Guest"
                     }`}</ListSubheader>
                   }
                 >
@@ -193,18 +192,34 @@ export default function Profile({ logStatus, setLogStatus }) {
               </IconButton>
             </Grid>
           )}
-          {data.message && (
+          {data.username ? (
             <Snackbar
-              open={errorOpen}
+              open={snackBarLogin}
               autoHideDuration={5000}
-              onClose={() => setErrorOpen(false)}
+              onClose={() => setSnackBarLogin(false)}
             >
               <Alert
-                onClose={() => setErrorOpen(false)}
-                severity="error"
+                variant="filled"
+                onClose={() => setSnackBarLogin(false)}
+                severity="success"
                 sx={{ width: "100%", mb: 3 }}
               >
-                {data.message}
+                Login Successful
+              </Alert>
+            </Snackbar>
+          ) : (
+            <Snackbar
+              open={snackBarLogout}
+              autoHideDuration={5000}
+              onClose={() => setSnackBarLogout(false)}
+            >
+              <Alert
+                variant="filled"
+                onClose={() => setSnackBarLogout(false)}
+                severity="warning"
+                sx={{ width: "100%", mb: 3 }}
+              >
+                Logout Successful
               </Alert>
             </Snackbar>
           )}
@@ -231,14 +246,12 @@ export default function Profile({ logStatus, setLogStatus }) {
         openLogin={openLogin}
         setOpenLogin={setOpenLogin}
         setOpenRegister={setOpenRegister}
-        setLogStatus={setLogStatus}
         setOpen={setOpen}
       />
       <SignUpDialogue
         openRegister={openRegister}
         setOpenLogin={setOpenLogin}
         setOpenRegister={setOpenRegister}
-        setLogStatus={setLogStatus}
         setOpen={setOpen}
       />
     </>

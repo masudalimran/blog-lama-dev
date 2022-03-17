@@ -12,7 +12,6 @@ const salt = bcrypt.genSaltSync(saltRound);
 userRouter.get("/:id", async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
-    console.log(user);
     const { password, ...others } = user._doc;
     res.json(others);
   } catch (error) {
@@ -37,7 +36,7 @@ userRouter.put("/:id", async (req, res) => {
       const { password, ...others } = updatedUser._doc;
       res.send(others);
     } catch (error) {
-      res.status(500).json(error.message);
+      res.status(500).json({ message: error.message });
     }
   } else
     res.status(401).json({ message: "You can only update in your account" });

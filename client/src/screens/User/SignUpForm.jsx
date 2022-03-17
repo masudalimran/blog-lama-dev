@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,23 +13,28 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../Redux/features/user";
-import { Alert } from "@mui/material";
+import { Alert, IconButton, Input, InputAdornment } from "@mui/material";
 import Loading from "../../components/alerts/Loading";
+import DataContext from "../../Context/DataContext";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const theme = createTheme();
 
-export default function SignUpForm({
-  setOpenRegister,
-  setOpenLogin,
-  setLogStatus,
-  setOpen,
-}) {
+export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
   // States
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [matchedPass, setMatchedPass] = useState(true);
+  const [showPass, setShowPass] = useState(false);
+  const [showRePass, setShowRePass] = useState(false);
   const [subscriber, setSubscriber] = useState(false);
+
+  // Data context
+  const { setSnackBarLogin } = useContext(DataContext);
 
   // Store
   const { data, status, error } = useSelector((state) => state.user);
@@ -46,19 +51,23 @@ export default function SignUpForm({
         subscriber,
       })
     );
+    setSnackBarLogin(true);
   };
 
   useEffect(() => {
     if (!data.message && data.username && !error) {
       setOpenRegister(false);
-      setLogStatus(true);
-      localStorage.setItem(
-        "loginInfo",
-        JSON.stringify({ username: data.username, email: data.email })
-      );
       setOpen(false);
     }
-  }, [data]);
+  }, [data, error]);
+
+  useEffect(() => {
+    if (rePassword.length <= password.length) {
+      if (!(password.slice(0, rePassword.length) === rePassword))
+        setMatchedPass(false);
+      else setMatchedPass(true);
+    } else setMatchedPass(false);
+  }, [rePassword]);
 
   const handleLogin = () => {
     setOpenRegister(false);
@@ -91,38 +100,71 @@ export default function SignUpForm({
           >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Input
                   required
                   fullWidth
-                  label="First Name"
+                  placeholder="First Name"
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <Input
                   required
                   fullWidth
-                  label="Last Name"
+                  placeholder="Last Name"
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <Input
                   required
                   fullWidth
-                  label="Email Address"
+                  placeholder="Email Address"
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <Input
                   required
                   fullWidth
-                  label="Password"
-                  type="password"
+                  placeholder="Password"
+                  type={showPass ? "text" : "password"}
                   onChange={(e) => setPassword(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPass(!showPass)}>
+                        {showPass ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Input
+                  required
+                  fullWidth
+                  placeholder="Re-Enter Password"
+                  type={showRePass ? "text" : "password"}
+                  error={matchedPass ? false : true}
+                  onChange={(e) => setRePassword(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowRePass(!showRePass)}>
+                        {showRePass ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                {!matchedPass && (
+                  <Alert severity="error">Password Not Matched</Alert>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
@@ -133,7 +175,7 @@ export default function SignUpForm({
                       onChange={(e) => setSubscriber(e.target.checked)}
                     />
                   }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  label="I want to receive updates via email."
                 />
               </Grid>
             </Grid>
@@ -146,6 +188,7 @@ export default function SignUpForm({
               type="submit"
               fullWidth
               variant="contained"
+              disabled={matchedPass ? false : true}
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up

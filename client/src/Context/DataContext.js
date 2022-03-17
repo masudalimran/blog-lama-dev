@@ -2,26 +2,19 @@ import { createContext, useEffect, useState } from "react";
 
 const DataContext = createContext({});
 export const DataProvider = ({ children }) => {
-  const [logStatus, setLogStatus] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
-  useEffect(() => {
-    if (localStorage.getItem("loginInfo")) {
-      setLogStatus(true);
-    } else {
-      setLogStatus(false);
-    }
-  }, [logStatus]);
+  const [snackBarLogin, setSnackBarLogin] = useState(false);
 
   return (
     <DataContext.Provider
       value={{
-        logStatus,
-        setLogStatus,
         openLogin,
         setOpenLogin,
         openRegister,
         setOpenRegister,
+        snackBarLogin,
+        setSnackBarLogin,
       }}
     >
       {children}

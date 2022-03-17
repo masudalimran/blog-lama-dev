@@ -18,13 +18,8 @@ authRouter.post("/register", async (req, res) => {
     else if (emailExist)
       res.status(201).json({ message: "Email already exist" });
     else {
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, salt),
-        profilePic: req.body.profilePic,
-        subscriber: req.body.subscriber,
-      });
+      req.body.password = bcrypt.hashSync(req.body.password, salt);
+      const newUser = new User(req.body);
       const user = await newUser.save();
       //   Skipping password field as response to user
       const { password, ...others } = user._doc;

@@ -1,12 +1,9 @@
 import { Grid } from "@mui/material";
-import { useContext } from "react";
-import DataContext from "../../Context/DataContext";
 import Profile from "./socialMedia/Profile";
 import SocialMedia from "./socialMedia/SocialMedia";
 import TopBarMenu from "./socialMedia/TopBarMenu";
 
 export default function TopBar() {
-  const { logStatus, setLogStatus } = useContext(DataContext);
   return (
     <>
       <Grid
@@ -22,7 +19,7 @@ export default function TopBar() {
           <TopBarMenu />
         </Grid>
         <Grid item lg={3} xs={6}>
-          <Profile logStatus={logStatus} setLogStatus={setLogStatus} />
+          <Profile />
         </Grid>
       </Grid>
     </>

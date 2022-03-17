@@ -17,12 +17,21 @@ const userSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
-      default: "https://picsum.photos/50/50",
+      default: "https://picsum.photos/500/500",
     },
     subscriber: {
       type: Boolean,
       default: false,
     },
+    address: String,
+    religion: String,
+    maritalStatus: String,
+    fatherName: String,
+    motherName: String,
+    companyName: String,
+    occupation: String,
+    hobbies: String,
+    socialMedia: Array,
   },
   {
     timestamps: true,
