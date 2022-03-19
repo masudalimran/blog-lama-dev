@@ -15,10 +15,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profilePic: {
-      type: String,
-      default: "https://picsum.photos/500/500",
-    },
+    profilePic: String,
     subscriber: {
       type: Boolean,
       default: false,

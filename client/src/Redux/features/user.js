@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Async Functions
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (data) => {
@@ -12,6 +13,14 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const loginUser = createAsyncThunk("user/login", async (data) => {
+  const res = await axios.post("/api/auth/login", data);
+  if (res.data.username) {
+    localStorage.setItem("loginInfo", JSON.stringify(res.data));
+  }
+  return res.data;
+});
+
 export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
   const { _id } = JSON.parse(localStorage.getItem("loginInfo"));
   const res = await axios.put(`/api/user/${_id}`, data);
@@ -21,26 +30,40 @@ export const updateUser = createAsyncThunk("user/updateUser", async (data) => {
   }
   return res.data;
 });
-export const loginUser = createAsyncThunk("user/login", async (data) => {
-  const res = await axios.post("/api/auth/login", data);
-  if (res.data.username) {
-    localStorage.setItem("loginInfo", JSON.stringify(res.data));
-  }
-  return res.data;
+
+export const checkPass = createAsyncThunk("user/checkPass", async (data) => {
+  const { _id } = JSON.parse(localStorage.getItem("loginInfo"));
+  const res = await axios.post(`/api/auth/check-pass/${_id}`, data);
+  return res.data.passwordMatched;
 });
 
+export const profilePicUpdate = createAsyncThunk(
+  "user/proPicUpdate",
+  async (data) => {
+    const res = await axios.post("/api/uploads/userPP", data);
+    return res.data;
+  }
+);
 const initialState = {
-  data: {},
+  regData: {},
+  loginData: {},
   pending: false,
   error: false,
+  updatedData: {},
+  passCheckData: {},
+  proPicData: {},
 };
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = initialState.data;
+      state.loginData = initialState.loginData;
+      state.regData = initialState.regData;
       state.status = initialState.status;
+    },
+    refreshProPicData: (state) => {
+      state.proPicData = initialState.proPicData;
     },
   },
   extraReducers: {
@@ -49,7 +72,7 @@ export const userSlice = createSlice({
       state.error = false;
     },
     [registerUser.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      state.regData = action.payload;
       state.pending = false;
     },
     [registerUser.rejected]: (state) => {
@@ -58,9 +81,10 @@ export const userSlice = createSlice({
     },
     [loginUser.pending]: (state) => {
       state.pending = true;
+      state.error = false;
     },
     [loginUser.fulfilled]: (state, action) => {
-      state.data = action.payload;
+      state.loginData = action.payload;
       state.pending = false;
     },
     [loginUser.rejected]: (state) => {
@@ -68,19 +92,43 @@ export const userSlice = createSlice({
       state.pending = false;
     },
     [updateUser.pending]: (state) => {
-      state.status = "loading";
+      state.pending = true;
+      state.error = false;
     },
     [updateUser.fulfilled]: (state, action) => {
-      state.data = action.payload;
-      state.status = "success";
-      state.error = null;
+      state.updatedData = action.payload;
+      state.pending = false;
     },
-    [updateUser.rejected]: (state, action) => {
-      state.error = action.payload;
-      state.status = "error";
+    [updateUser.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [checkPass.pending]: (state) => {
+      state.pending = false;
+      state.error = false;
+    },
+    [checkPass.fulfilled]: (state, action) => {
+      state.passCheckData = action.payload;
+      state.pending = false;
+    },
+    [checkPass.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [profilePicUpdate.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [profilePicUpdate.fulfilled]: (state, action) => {
+      state.proPicData = action.payload;
+      state.pending = false;
+    },
+    [profilePicUpdate.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
     },
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, refreshProPicData } = userSlice.actions;
 export default userSlice.reducer;

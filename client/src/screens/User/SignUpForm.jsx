@@ -36,7 +36,7 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
   const { setSnackBarLogin } = useContext(DataContext);
 
   // Store
-  const { data, pending, error } = useSelector((state) => state.user);
+  const { regData, pending, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   // Functions
@@ -53,12 +53,12 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
   };
 
   useEffect(() => {
-    if (data.username) {
+    if (regData.username) {
       setOpenRegister(false);
       setOpen(false);
       setSnackBarLogin(true);
     }
-  }, [data]);
+  }, [regData]);
 
   useEffect(() => {
     if (rePassword.length <= password.length) {
@@ -180,8 +180,8 @@ export default function SignUpForm({ setOpenRegister, setOpenLogin, setOpen }) {
             </Grid>
             {pending ? (
               <Loading />
-            ) : data.message ? (
-              <Alert severity="error">{data.message}</Alert>
+            ) : regData.message ? (
+              <Alert severity="error">{regData.message}</Alert>
             ) : (
               error && <Alert severity="error">Something Went Wrong...</Alert>
             )}

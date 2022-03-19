@@ -5,16 +5,17 @@ import {
   useTheme,
   useMediaQuery,
   IconButton,
+  Link,
 } from "@mui/material";
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as routerLink, useNavigate } from "react-router-dom";
 import SideBar from "../../components/body/SideBar";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import EditIcon from "@mui/icons-material/Edit";
-// import generateword from "../../hooks/GenerateRandomWord";
+import { PF } from "../../publicFolder";
 
 export default function ProfilePage() {
   const theme = useTheme();
@@ -22,10 +23,6 @@ export default function ProfilePage() {
 
   const navigate = useNavigate();
   const localData = JSON.parse(localStorage.getItem("loginInfo"));
-  let socialMedia = [];
-  if (localData.socialMedia) {
-    socialMedia = localData.socialMedia.split("::||::");
-  }
 
   useEffect(() => {
     if (!localData) {
@@ -46,9 +43,9 @@ export default function ProfilePage() {
           component="span"
           sx={{ fontSize: { xs: "18px", lg: "32px" } }}
         >
-          {localData.username}
+          {localData.username.toUpperCase()}
         </Typography>
-        <Link to="/edit-profile">
+        <Link component={routerLink} to="/edit-profile">
           <IconButton title="Edit Profile">
             <EditIcon sx={{ color: "green" }} />
           </IconButton>
@@ -59,7 +56,11 @@ export default function ProfilePage() {
       <Grid container justifyContent="space-around">
         <Grid item xs={11} md={4} xl={2}>
           <img
-            src={localData.profilePic}
+            src={
+              localData.profilePic
+                ? PF + localData.profilePic
+                : PF + "00000no_231_image.jpg"
+            }
             alt={localData.username + " Profile Picture"}
             title={localData.username + " Profile Picture"}
             width="100%"
@@ -69,9 +70,7 @@ export default function ProfilePage() {
         </Grid>
 
         <Grid item xs={10} md={6} xl={6}>
-          <Typography variant="body1">
-            User Name: {localData.username}
-          </Typography>
+          <Typography variant="body1">Name: {localData.username}</Typography>
           <Divider />
           <Typography variant="body1">Email: {localData.email}</Typography>
           <Divider />
@@ -84,7 +83,9 @@ export default function ProfilePage() {
           </Typography>
           <Typography variant="body1">Address: {localData.address}</Typography>
           <Divider />
-          <Typography variant="body1">Religion:{localData.religion}</Typography>
+          <Typography variant="body1">
+            Religion: {localData.religion}
+          </Typography>
           <Divider />
           <Typography variant="body1">
             Marital Status: {localData.maritalStatus}
@@ -119,27 +120,30 @@ export default function ProfilePage() {
           {/* Facebook */}
           <Grid container alignItems="center">
             <Grid item>
-              <FacebookIcon size="small" sx={{ color: "navy" }} />
+              <IconButton disabled>
+                <FacebookIcon size="small" sx={{ color: "navy" }} />
+              </IconButton>
             </Grid>
             <Grid item>
-              <Link to={socialMedia[0] || "#"}>
+              <Link href={localData.socialMedia[0] || "#"} target="_blank">
                 <Typography component="span" variant="subtitle2">
-                  {socialMedia[0] || ""}
+                  {localData.socialMedia[0] || ""}
                 </Typography>
               </Link>
             </Grid>
           </Grid>
 
           {/* Twitter */}
-
           <Grid container alignItems="center">
             <Grid item>
-              <TwitterIcon fontSize="small" color="info" />
+              <IconButton disabled>
+                <TwitterIcon fontSize="small" color="info" />
+              </IconButton>
             </Grid>
             <Grid item>
-              <Link to={socialMedia[1] || "#"}>
+              <Link href={localData.socialMedia[1] || "#"} target="_blank">
                 <Typography component="span" variant="subtitle2">
-                  {socialMedia[1] || ""}
+                  {localData.socialMedia[1] || ""}
                 </Typography>
               </Link>
             </Grid>
@@ -148,12 +152,14 @@ export default function ProfilePage() {
           {/* GitHub */}
           <Grid container alignItems="center">
             <Grid item>
-              <GitHubIcon fontSize="small" sx={{ color: "black" }} />
+              <IconButton disabled>
+                <GitHubIcon fontSize="small" sx={{ color: "black" }} />
+              </IconButton>
             </Grid>
             <Grid item>
-              <Link to={socialMedia[2] || "#"}>
+              <Link href={localData.socialMedia[2] || "#"} target="_blank">
                 <Typography component="span" variant="subtitle2">
-                  {socialMedia[2] || ""}
+                  {localData.socialMedia[2] || ""}
                 </Typography>
               </Link>
             </Grid>
@@ -162,45 +168,18 @@ export default function ProfilePage() {
           {/* Instagram */}
           <Grid container alignItems="center">
             <Grid item>
-              <InstagramIcon fontSize="small" sx={{ color: "red" }} />
+              <IconButton disabled>
+                <InstagramIcon fontSize="small" sx={{ color: "red" }} />
+              </IconButton>
             </Grid>
             <Grid item>
-              <Link to={socialMedia[3] || "#"}>
+              <Link href={localData.socialMedia[3] || "#"} target="_blank">
                 <Typography component="span" variant="subtitle2">
-                  {socialMedia[3] || ""}
+                  {localData.socialMedia[3] || ""}
                 </Typography>
               </Link>
             </Grid>
           </Grid>
-          {/* </Grid> */}
-          {/* </Grid> */}
-          {/* </IconButton> */}
-          {/* </Link> */}
-          {/* </Grid> */}
-          {/* <Grid item sm={1} xs={2}> */}
-          {/* <Link href="https://twitter.com/masudalimran1" target="_blank"> */}
-          {/* <IconButton aria-label="facebook" size="small"> */}
-          {/* {socialMedia[1] || "123123123"} */}
-          {/* </IconButton> */}
-          {/* </Link> */}
-          {/* </Grid> */}
-          {/* <Grid item sm={1} xs={2}> */}
-          {/* <Link href="https://github.com/masudalimran" target="_blank"> */}
-          {/* <IconButton aria-label="facebook" size="small"> */}
-          {/* {socialMedia[2] || "123123123123"} */}
-          {/* </IconButton> */}
-          {/* </Link> */}
-          {/* </Grid> */}
-          {/* <Grid item sm={1} xs={2}> */}
-          {/* <Link
-            href="https://www.instagram.com/elonmusk/?hl=en"
-            target="_blank"
-          // > */}
-          {/* <IconButton aria-label="facebook" size="small"> */}
-          {/* {socialMedia[3] || "123123123132"} */}
-          {/* </IconButton> */}
-          {/* </Link> */}
-          {/* </Grid> */}
         </Grid>
 
         <Grid item xs={0} md={0} xl={3}>

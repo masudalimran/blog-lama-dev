@@ -1,5 +1,8 @@
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   Box,
   Button,
@@ -8,7 +11,9 @@ import {
   Grid,
   IconButton,
   Input,
+  InputAdornment,
   Snackbar,
+  TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -17,20 +22,38 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../Redux/features/user";
+import {
+  checkPass,
+  profilePicUpdate,
+  refreshProPicData,
+  updateUser,
+} from "../../Redux/features/user";
 import Loading from "../../components/alerts/Loading";
+import { PF } from "../../publicFolder";
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
+
   // Local Host
   const localData = JSON.parse(localStorage.getItem("loginInfo"));
   // States
-  const [profilePic, setProfilePic] = useState(localData.profilePic);
+  const [profilePic, setProfilePic] = useState("");
   const [username, setUsername] = useState(localData.username);
   const [email, setEmail] = useState(localData.email);
-  const [password, setPassword] = useState(localData.password);
   const [subscriber, setSubscriber] = useState(localData.subscriber);
+  // Password Management
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [reNewPassword, setReNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showReNewPassword, setShowReNewPassword] = useState(false);
+  const [newPassMatched, setNewPassMatched] = useState(false);
+
   // Personal Information
   const [address, setAddress] = useState(localData.address || "");
   const [religion, setReligion] = useState(localData.religion || "");
@@ -48,45 +71,131 @@ export default function EditProfilePage() {
   const [github, setGithub] = useState(localData.socialMedia[2] || "");
   const [insta, setInsta] = useState(localData.socialMedia[3] || "");
   const socialMedia = [facebook, twitter, github, insta];
+  // Check if profile updated
+  const [isUpdated, setIsUpdated] = useState(false);
+
   // SnackBar
   const [updateSnackBar, setUpdateSnackBar] = useState(false);
 
   // Store
-  const { data, status, error } = useSelector((state) => state.user);
-  useEffect(() => {
-    if (!localStorage.getItem("loginInfo")) navigate("/");
-    if (data.username) setUpdateSnackBar(true);
-  }, [data]);
+  const { updatedData, pending, error, passCheckData, proPicData } =
+    useSelector((state) => state.user);
 
   // Functions
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      updateUser({
-        // _id: localData._id,
-        username,
-        email,
-        password,
-        profilePic,
-        subscriber,
-        address,
-        religion,
-        maritalStatus,
-        fatherName,
-        motherName,
-        companyName,
-        occupation,
-        hobbies,
-        socialMedia,
-      })
-    );
-    // if (!data.message && !error) setUpdateSnackBar(true);
+    let updatedUser = {
+      _id: localData._id,
+      username,
+      email,
+      password: newPassword,
+      subscriber,
+      address,
+      religion,
+      maritalStatus,
+      fatherName,
+      motherName,
+      companyName,
+      occupation,
+      hobbies,
+      socialMedia,
+    };
+    if (profilePic !== "") {
+      const data = new FormData();
+      const ext = profilePic.name.split(".");
+      const filename =
+        Date.now() +
+        "-" +
+        username.replace(/\s+/g, "") +
+        "-profile-picture." +
+        ext.slice(-1);
+      data.append("name", filename);
+      data.append("profilePic", profilePic);
+      updatedUser.profilePic = filename;
+      if (localData.profilePic) updatedUser.prevImg = localData.profilePic;
+      dispatch(profilePicUpdate(data));
+    } else dispatch(refreshProPicData());
+    dispatch(updateUser(updatedUser));
+    setProfilePic("");
   };
+
+  // TODO Use Effects
+  //  Check if logged in
+  useEffect(() => {
+    if (!localStorage.getItem("loginInfo")) navigate("/");
+  }, []);
+
+  // Show snackbar
+  useEffect(() => {
+    if (updatedData.username) setUpdateSnackBar(true);
+  }, [updatedData]);
+
+  useEffect(() => {}, [profilePic]);
+
+  // Check Password
+  useEffect(() => {
+    dispatch(checkPass({ _id: localData._id, password }));
+    if (password === "") {
+      setNewPassword("");
+      setReNewPassword("");
+    }
+  }, [password]);
+
+  // Check if new passwords match
+  useEffect(() => {
+    if (reNewPassword.length <= newPassword.length) {
+      if (!(newPassword.slice(0, reNewPassword.length) === reNewPassword))
+        setNewPassMatched(false);
+      else setNewPassMatched(true);
+    } else setNewPassMatched(false);
+  }, [reNewPassword]);
+
+  // Check if changes are made
+  useEffect(() => {
+    if (
+      profilePic === "" &&
+      password === "" &&
+      username === localData.username &&
+      email === localData.email &&
+      subscriber === localData.subscriber &&
+      address === (localData.address || "") &&
+      religion === (localData.religion || "") &&
+      maritalStatus === (localData.maritalStatus || "") &&
+      fatherName === (localData.fatherName || "") &&
+      motherName === (localData.motherName || "") &&
+      companyName === (localData.companyName || "") &&
+      occupation === (localData.occupation || "") &&
+      hobbies === (localData.hobbies || "") &&
+      socialMedia[0] === (localData.socialMedia[0] || "") &&
+      socialMedia[1] === (localData.socialMedia[1] || "") &&
+      socialMedia[2] === (localData.socialMedia[2] || "") &&
+      socialMedia[3] === (localData.socialMedia[3] || "")
+    ) {
+      setIsUpdated(false);
+    } else {
+      setIsUpdated(true);
+    }
+  }, [
+    profilePic,
+    password,
+    username,
+    email,
+    subscriber,
+    address,
+    religion,
+    maritalStatus,
+    fatherName,
+    motherName,
+    companyName,
+    occupation,
+    hobbies,
+    socialMedia,
+  ]);
 
   return (
     <>
-      <Grid container justifyContent="center">
+      <Grid container alignItems="center" flexDirection="column" spacing={3}>
         <Grid item lg={6} xs={10}>
           <Box component="form" onSubmit={handleSubmit}>
             <Grid
@@ -97,7 +206,13 @@ export default function EditProfilePage() {
             >
               <Grid item>
                 <img
-                  src={profilePic}
+                  src={
+                    profilePic !== ""
+                      ? URL.createObjectURL(profilePic)
+                      : localData.profilePic
+                      ? PF + localData.profilePic
+                      : PF + "00000no_231_image.jpg"
+                  }
                   alt={username + " profile picture"}
                   width="100%"
                   height="150px"
@@ -111,6 +226,7 @@ export default function EditProfilePage() {
                     id="icon-button-file"
                     type="file"
                     sx={{ display: "none" }}
+                    onChange={(e) => setProfilePic(e.target.files[0])}
                   />
                   <IconButton
                     color="primary"
@@ -122,29 +238,112 @@ export default function EditProfilePage() {
                 </label>
               </Grid>
             </Grid>
-            <Input
+            <TextField
               required
               fullWidth
               defaultValue={username || ""}
+              label="User Name"
               autoFocus
               onChange={(e) => setUsername(e.target.value)}
+              sx={{ mb: 2 }}
             />
-            <Input
+            <TextField
               required
               fullWidth
-              defaultValue={email}
+              defaultValue={email || ""}
+              label="Email"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <Grid container>
               <Grid item sx={{ mr: 3 }}>
-                <Input
-                  required
-                  defaultValue={password || ""}
-                  placeholder="Password"
-                  type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="change-password"
+                    sx={{
+                      bgcolor: !newPassMatched && password && "orange",
+                    }}
+                  >
+                    <Typography>Change Password</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Input
+                      defaultValue={password}
+                      placeholder="Enter Old Password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={(e) => setPassword(e.target.value)}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </AccordionDetails>
+                  {passCheckData && (
+                    <>
+                      <AccordionDetails>
+                        <Input
+                          defaultValue={newPassword}
+                          placeholder="New Password"
+                          type={showNewPassword ? "text" : "password"}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() =>
+                                  setShowNewPassword(!showNewPassword)
+                                }
+                              >
+                                {showNewPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+                      </AccordionDetails>
+                      <AccordionDetails>
+                        <Input
+                          defaultValue={reNewPassword}
+                          placeholder="Confirm Password"
+                          type={showReNewPassword ? "text" : "password"}
+                          onChange={(e) => setReNewPassword(e.target.value)}
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() =>
+                                  setShowReNewPassword(!showReNewPassword)
+                                }
+                              >
+                                {showReNewPassword ? (
+                                  <VisibilityIcon />
+                                ) : (
+                                  <VisibilityOffIcon />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+
+                        {!newPassMatched && (
+                          <Alert severity="error">Password Not Matched</Alert>
+                        )}
+                      </AccordionDetails>
+                    </>
+                  )}
+                </Accordion>
               </Grid>
               <Grid item>
                 <Grid item lg={6}>
@@ -167,63 +366,72 @@ export default function EditProfilePage() {
             >
               Personal Information
             </Typography>
-            <Input
+            <TextField
               fullWidth
               defaultValue={address || ""}
-              placeholder="Address"
+              label="Address"
               onChange={(e) => setAddress(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <Grid container>
               <Grid item sx={{ mr: 3 }}>
-                <Input
+                <TextField
                   defaultValue={religion || ""}
                   placeholder="Religion"
+                  label="Religion"
                   onChange={(e) => setReligion(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
               <Grid item>
-                <Input
+                <TextField
                   defaultValue={maritalStatus || ""}
-                  placeholder="Marital Status"
+                  label="Marital Status"
                   onChange={(e) => setMaritalStatus(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
             </Grid>
             <Grid container>
               <Grid item sx={{ mr: 3 }}>
-                <Input
+                <TextField
                   defaultValue={fatherName || ""}
-                  placeholder="Father's Name"
+                  label="Father's Name"
                   onChange={(e) => setFatherName(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
               <Grid item>
-                <Input
+                <TextField
                   defaultValue={motherName || ""}
-                  placeholder="Mother's Name"
+                  label="Mother's Name"
                   onChange={(e) => setMotherName(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
             </Grid>
-            <Input
+            <TextField
               fullWidth
               defaultValue={companyName || ""}
-              placeholder="Company Name"
+              label="Company Name"
               onChange={(e) => setCompanyName(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <Grid container>
               <Grid item sx={{ mr: 3 }}>
-                <Input
+                <TextField
                   defaultValue={occupation || ""}
-                  placeholder="Occupation"
+                  label="Occupation"
                   onChange={(e) => setOccupation(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
               <Grid item>
-                <Input
+                <TextField
                   defaultValue={hobbies || ""}
-                  placeholder="Best Hobby"
+                  label="Best Hobby"
                   onChange={(e) => setHobbies(e.target.value)}
+                  sx={{ mb: 2 }}
                 />
               </Grid>
             </Grid>
@@ -236,7 +444,7 @@ export default function EditProfilePage() {
             </Typography>
             <Grid container justifyContent="space-between">
               <Grid item lg={3} xs={12} sm={6}>
-                <IconButton>
+                <IconButton disabled>
                   <FacebookIcon size="small" sx={{ color: "navy" }} />
                 </IconButton>
                 <Input
@@ -246,7 +454,7 @@ export default function EditProfilePage() {
                 />
               </Grid>
               <Grid item lg={3} xs={12} sm={6}>
-                <IconButton>
+                <IconButton disabled>
                   <TwitterIcon size="small" color="info" />
                 </IconButton>
                 <Input
@@ -256,7 +464,7 @@ export default function EditProfilePage() {
                 />
               </Grid>
               <Grid item lg={3} xs={12} sm={6}>
-                <IconButton>
+                <IconButton disabled>
                   <GitHubIcon size="small" sx={{ color: "black" }} />
                 </IconButton>
                 <Input
@@ -266,7 +474,7 @@ export default function EditProfilePage() {
                 />
               </Grid>
               <Grid item lg={3} xs={12} sm={6}>
-                <IconButton>
+                <IconButton disabled>
                   <InstagramIcon size="small" sx={{ color: "red" }} />
                 </IconButton>
                 <Input
@@ -276,17 +484,17 @@ export default function EditProfilePage() {
                 />
               </Grid>
             </Grid>
-            {status === "loading" ? (
+            {pending ? (
               <Loading />
-            ) : data.message ? (
-              <Alert severity="error">{data}</Alert>
+            ) : updatedData.message ? (
+              <Alert severity="error">{updatedData.message}</Alert>
             ) : (
               error && <Alert severity="error">"SomeThing Went wrong"</Alert>
             )}
-
             <Grid item>
               <Button
                 type="submit"
+                disabled={(!newPassMatched && password !== "") || !isUpdated}
                 fullWidth
                 variant="contained"
                 color="warning"
@@ -308,7 +516,7 @@ export default function EditProfilePage() {
               severity="success"
               sx={{ width: "100%", mb: 3 }}
             >
-              Update Successful
+              {proPicData.message ? proPicData.message : "Update Successful"}
             </Alert>
           </Snackbar>
         </Grid>

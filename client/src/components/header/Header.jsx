@@ -1,5 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { PF } from "../../publicFolder";
 
 export default function Header() {
   return (
@@ -13,13 +14,14 @@ export default function Header() {
         <Grid item>
           <Typography
             variant="h4"
+            align="center"
             sx={{
               fontStyle: "italic",
               fontFamily: "cursive",
               fontSize: { xs: 32, md: 60 },
             }}
           >
-            React & Node
+            Express yourself
           </Typography>
         </Grid>
         <Grid item>
@@ -27,15 +29,18 @@ export default function Header() {
             variant="h1"
             sx={{ fontFamily: "cursive", fontSize: { xs: 32, md: 60 } }}
           >
-            Blog
+            With B|Log
           </Typography>
         </Grid>
       </Grid>
       <Box sx={{ mt: { xs: 0, md: "6%" } }} component="div">
         <img
-          src="https://picsum.photos/1000/300"
-          alt="Random Sobi"
+          src={PF + "/home/banner.jpg"}
+          alt="b-log-banner"
+          title="BLog Banner"
           width="100%"
+          height="300px"
+          style={{ objectFit: "cover" }}
         />
       </Box>
     </>

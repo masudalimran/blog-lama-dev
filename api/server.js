@@ -14,9 +14,14 @@ import multerRouter from "./routes/Multer.js";
 // Port define
 const PORT = process.env.PORT || "3378";
 
+// manage filename & dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 // Mongoose Connection
 mongoose.connect(
@@ -32,10 +37,6 @@ mongoose.connect(
     console.err(err);
   }
 );
-
-// manage filename & dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/index.html"));

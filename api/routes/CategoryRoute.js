@@ -54,4 +54,14 @@ categoryRouter.delete("/:id", async (req, res) => {
   }
 });
 
+// get all category
+categoryRouter.get("/", async (req, res) => {
+  try {
+    const allCategory = await Category.find();
+    res.json(allCategory);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default categoryRouter;

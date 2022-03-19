@@ -6,6 +6,7 @@ import {} from "dotenv/config";
 // bcrypt Stuff
 import bcrypt from "bcrypt";
 const saltRound = Number(process.env.BCRYPT_SALT) || 5;
+// const saltRound = 5;
 const salt = bcrypt.genSaltSync(saltRound);
 
 // Registration Route
@@ -44,6 +45,20 @@ authRouter.post("/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+});
+
+// Check Old Password
+authRouter.post("/check-pass/:id", async (req, res) => {
+  if (req.body._id === req.params.id) {
+    try {
+      const user = await User.findById(req.params.id);
+      if (await bcrypt.compareSync(req.body.password, user.password))
+        res.json({ passwordMatched: true });
+      else res.json({ passwordMatched: false });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  } else res.status(500).json({ message: "User Not Found" });
 });
 
 export default authRouter;

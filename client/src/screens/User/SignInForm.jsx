@@ -11,6 +11,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   Alert,
   Dialog,
@@ -18,6 +20,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Redux/features/user";
@@ -31,13 +35,14 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
   const [forgotOpen, setForgotOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [showPass, setShowPass] = useState(false);
 
   // Data context
   const { setSnackBarLogin } = useContext(DataContext);
 
   // Store
   const dispatch = useDispatch();
-  const { data, pending, error } = useSelector((state) => state.user);
+  const { loginData, pending, error } = useSelector((state) => state.user);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -45,12 +50,12 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
   };
 
   useEffect(() => {
-    if (data.username) {
+    if (loginData.username) {
       setOpenLogin(false);
       setOpen(false);
       setSnackBarLogin(true);
     }
-  }, [data]);
+  }, [loginData]);
 
   const handleRegister = () => {
     setOpenLogin(false);
@@ -92,8 +97,17 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
               required
               fullWidth
               label="Password"
-              type="password"
+              type={showPass ? "text" : "password"}
               onChange={(e) => setPass(e.target.value)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPass(!showPass)}>
+                      {showPass ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -101,8 +115,8 @@ export default function SignInForm({ setOpenLogin, setOpenRegister, setOpen }) {
             />
             {pending ? (
               <Loading />
-            ) : data.message ? (
-              <Alert severity="error">{data.message}</Alert>
+            ) : loginData.message ? (
+              <Alert severity="error">{loginData.message}</Alert>
             ) : (
               error && <Alert severity="error">Something Went Wrong...</Alert>
             )}

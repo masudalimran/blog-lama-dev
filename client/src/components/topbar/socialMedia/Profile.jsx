@@ -25,7 +25,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import SignInDialogue from "../../../screens/User/SignInDialogue";
 import SignUpDialogue from "../../../screens/User/SignUpDialogue";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +33,7 @@ import DataContext from "../../../Context/DataContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../Redux/features/user";
 import Loading from "../../alerts/Loading";
+import { PF } from "../../../publicFolder";
 
 const top100Films = [
   { title: "The Shawshank Redemption", year: 1994 },
@@ -56,7 +57,6 @@ export default function Profile() {
     setSnackBarLogin,
   } = useContext(DataContext);
   const [snackBarLogout, setSnackBarLogout] = useState(false);
-  const localData = JSON.parse(localStorage.getItem("loginInfo"));
 
   const [openLogOutConfirm, setOpenLogOutConfirm] = useState(false);
   const handleClickOpen = () => {
@@ -66,6 +66,7 @@ export default function Profile() {
   // Store
   const dispatch = useDispatch();
   const { pending } = useSelector((state) => state.user);
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
 
   // Functions
   const navigate = useNavigate();
@@ -115,8 +116,8 @@ export default function Profile() {
                 onClick={() => setOpen(true)}
               >
                 <Avatar
-                  alt="Profile"
-                  src={localData.profilePic}
+                  alt={localData.username.toUpperCase()}
+                  src={PF + localData.profilePic}
                   sx={{ width: 28, height: 28 }}
                 />
               </IconButton>
