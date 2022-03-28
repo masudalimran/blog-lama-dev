@@ -41,7 +41,7 @@ export default function CreateCategory({
       {pending ? (
         <Loading />
       ) : error ? (
-        <Alert severity="error">Somethign Went Wrong...</Alert>
+        <Alert severity="error">Something Went Wrong...</Alert>
       ) : (
         <Dialog
           open={catDialogueOpen}

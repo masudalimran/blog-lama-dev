@@ -210,7 +210,7 @@ export default function EditProfilePage() {
                     profilePic !== ""
                       ? URL.createObjectURL(profilePic)
                       : localData.profilePic
-                      ? PF + localData.profilePic
+                      ? PF + "user/" + localData.profilePic
                       : PF + "00000no_231_image.jpg"
                   }
                   alt={username + " profile picture"}

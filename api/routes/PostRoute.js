@@ -9,8 +9,8 @@ const postRouter = Router();
 postRouter.post("/", async (req, res) => {
   const titleExist = await Post.findOne({ title: req.body.title });
   if (!titleExist) {
-    const newPost = new Post(req.body);
     try {
+      const newPost = new Post(req.body);
       const savedPost = await newPost.save();
       res.json(savedPost);
     } catch (error) {

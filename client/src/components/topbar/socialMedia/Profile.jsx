@@ -117,7 +117,7 @@ export default function Profile() {
               >
                 <Avatar
                   alt={localData.username.toUpperCase()}
-                  src={PF + localData.profilePic}
+                  src={PF + "user/" + localData.profilePic}
                   sx={{ width: 28, height: 28 }}
                 />
               </IconButton>

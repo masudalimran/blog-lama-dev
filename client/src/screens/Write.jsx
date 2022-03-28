@@ -9,9 +9,11 @@ import {
   MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useContext, useEffect, useState } from "react";
@@ -24,20 +26,48 @@ import { PF } from "../publicFolder";
 
 export default function Write() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Syncing form data
+  let getTempPostString;
+  const getLocalTempPost = JSON.parse(localStorage.getItem("tempPostString"));
+  if (getLocalTempPost === null || getLocalTempPost === ":|::|::|:")
+    getTempPostString = ["", "", "", ""];
+  else getTempPostString = getLocalTempPost.split(":|:");
+
   // States
   const [blogImage, setBlogImage] = useState("");
-  const [checkBlogImage, setCheckBlogImage] = useState(true);
-  const [title, setTitle] = useState("");
-  const [shortDesc, setShortDesc] = useState("");
-  const [category, setCategory] = useState("");
-  const [blog, setBlog] = useState("");
+  const [title, setTitle] = useState(getTempPostString[0] || "");
+  const [shortDesc, setShortDesc] = useState(getTempPostString[1] || "");
+  const [category, setCategory] = useState(getTempPostString[2] || "");
+  const [blog, setBlog] = useState(getTempPostString[3] || "");
   // create Category
   const [catDialogueOpen, setCatDialogueOpen] = useState(false);
+  const [allowSubmit, setAllowSubmit] = useState(false);
 
   // Use Effect
   useEffect(() => {
     dispatch(getAllCat());
   }, []);
+
+  useEffect(() => {
+    if (
+      title !== "" &&
+      shortDesc !== "" &&
+      category !== "" &&
+      blog !== "" &&
+      blogImage !== ""
+    ) {
+      setAllowSubmit(true);
+    } else {
+      let tempPostString = title
+        .concat(":|:", shortDesc)
+        .concat(":|:", category)
+        .concat(":|:", blog);
+      localStorage.setItem("tempPostString", JSON.stringify(tempPostString));
+      setAllowSubmit(false);
+    }
+  }, [title, shortDesc, category, blog, blogImage]);
 
   // Store
   const { allCat, pending, error } = useSelector((state) => state.category);
@@ -56,6 +86,7 @@ export default function Write() {
         shortDesc,
         userId: localData._id,
         fullPost: blog,
+        categoryId: category,
       };
       if (blogImage !== "") {
         const data = new FormData();
@@ -72,156 +103,181 @@ export default function Write() {
         data.append("blogImg", blogImage);
         createdPost.postPic = filename;
         dispatch(uploadBlogImg(data));
-        setCheckBlogImage(false);
-        console.log(createdPost);
         dispatch(writePost(createdPost));
-      } else setCheckBlogImage(true);
+        localStorage.removeItem("tempPostString");
+        navigate("/");
+      }
     }
   };
   return (
     <>
-      {/* {pending || pendingPost ? (
+      {pending || pendingPost ? (
         <Loading />
       ) : error || errorPost ? (
         <Alert severity="error">Something Went Wrong...</Alert>
       ) : (
-        <> */}
-      <CreateCategory
-        catDialogueOpen={catDialogueOpen}
-        setCatDialogueOpen={setCatDialogueOpen}
-      />
-      <Grid container justifyContent="center">
-        <Grid item lg={6} xs={10}>
-          <Box component="form" onSubmit={handlePublishBlog}>
-            <Grid
-              container
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item>
-                <img
-                  src={
-                    blogImage !== ""
-                      ? URL.createObjectURL(blogImage)
-                      : PF + "00000no_231_image.jpg"
-                  }
-                  alt="Halloween party"
-                  width="100%"
-                  height="150px"
-                  style={{ objectFit: "cover" }}
-                />
-              </Grid>
-              <Grid item position="absolute">
-                <label htmlFor="icon-button-file">
-                  <Input
-                    accept="image/*"
-                    id="icon-button-file"
-                    type="file"
-                    sx={{ display: "none" }}
-                    onChange={(e) => setBlogImage(e.target.files[0])}
-                  />
-                  <IconButton
-                    color="primary"
-                    aria-label="upload-picture"
-                    component="span"
-                  >
-                    <PhotoCamera />
-                  </IconButton>
-                </label>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                label="Title"
-                autoComplete="title"
-                onChange={(e) => setTitle(e.target.value)}
-                autoFocus
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                label="Short Description"
-                autoComplete="short-description"
-                onChange={(e) => setShortDesc(e.target.value)}
-              />
-            </Grid>
-            <Grid item>
-              <Grid container alignItems="center" spacing={2}>
-                <Grid item xs={12} md={10}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Category
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      required
-                      value={category}
-                      label="Category"
-                      onChange={(e) => setCategory(e.target.value)}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {allCat.map((x, i) => (
-                        <MenuItem key={i} value={x._id}>
-                          {x.catName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+        <>
+          <CreateCategory
+            catDialogueOpen={catDialogueOpen}
+            setCatDialogueOpen={setCatDialogueOpen}
+          />
+          <Grid container justifyContent="center">
+            <Grid item lg={6} xs={10}>
+              <Box component="form" onSubmit={handlePublishBlog}>
+                <Grid
+                  container
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <img
+                      src={
+                        blogImage !== ""
+                          ? URL.createObjectURL(blogImage)
+                          : PF + "00000no_231_image.jpg"
+                      }
+                      alt="Halloween party"
+                      width="100%"
+                      height="150px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </Grid>
+                  <Grid item position="absolute">
+                    <label htmlFor="icon-button-file">
+                      <Input
+                        accept="image/*"
+                        id="icon-button-file"
+                        type="file"
+                        sx={{ display: "none" }}
+                        onChange={(e) => setBlogImage(e.target.files[0])}
+                      />
+                      <IconButton
+                        color="primary"
+                        aria-label="upload-picture"
+                        component="span"
+                      >
+                        <PhotoCamera />
+                      </IconButton>
+                    </label>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} md={2}>
+                <Grid item>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Title"
+                    autoComplete="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Short Description"
+                    autoComplete="short-description"
+                    value={shortDesc}
+                    onChange={(e) => setShortDesc(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs={12} md={10}>
+                      <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">
+                          Category
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          required
+                          value={category}
+                          label="Category"
+                          onChange={(e) => setCategory(e.target.value)}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          {allCat.map((x, i) => (
+                            <MenuItem key={i} value={x._id}>
+                              {x.catName}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={2}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        onClick={() => setCatDialogueOpen(true)}
+                      >
+                        Add Category
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Blog Details"
+                    value={blog}
+                    minRows="8"
+                    multiline={true}
+                    autoComplete="details"
+                    error={blog.length > 1800 ? true : false}
+                    inputProps={{
+                      maxlength: 2000,
+                    }}
+                    helperText={
+                      <Typography
+                        align="right"
+                        variant="body2"
+                        color={blog.length > 1800 ? "error" : "primary"}
+                      >
+                        {blog.length}/2000
+                      </Typography>
+                    }
+                    onChange={(e) => setBlog(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
                   <Button
                     fullWidth
                     variant="contained"
-                    color="primary"
-                    onClick={() => setCatDialogueOpen(true)}
+                    color="warning"
+                    onClick={() => {
+                      window.location.reload();
+                      localStorage.removeItem("tempPostString");
+                    }}
                   >
-                    Add Category
+                    Clear All
                   </Button>
                 </Grid>
-              </Grid>
+                <Grid item>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={!allowSubmit}
+                  >
+                    Publish
+                  </Button>
+                </Grid>
+              </Box>
             </Grid>
-            <Grid item>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                label="Blog Details"
-                minRows="8"
-                multiline={true}
-                autoComplete="details"
-                onChange={(e) => setBlog(e.target.value)}
-              />
-            </Grid>
-            {!checkBlogImage && (
-              <Grid item>
-                <Alert severity="error">Please add an image for blog</Alert>
-              </Grid>
-            )}
-            <Grid item>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Publish
-              </Button>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>{" "}
+          </Grid>
+        </>
+      )}
     </>
-    //   )}
-    // </>
   );
 }

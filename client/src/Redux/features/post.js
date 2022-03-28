@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const writePost = createAsyncThunk("post/writePost", async (data) => {
   const res = axios.post("/api/post", data);
-  console.log(res.data);
+  // console.log(res.data);
   return res.data;
 });
 
