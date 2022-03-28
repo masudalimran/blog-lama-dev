@@ -21,6 +21,21 @@ userRouter.get("/:id", async (req, res) => {
   }
 });
 
+// Get All User(Username)
+userRouter.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+    const usersWOPass = [];
+    users.map((x, i) => {
+      const { _id, username } = x._doc;
+      usersWOPass.push({ _id, username });
+    });
+    res.json(usersWOPass);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 // Update user information Route
 userRouter.put("/:id", async (req, res) => {
   if (req.body._id === req.params.id) {

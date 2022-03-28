@@ -19,8 +19,6 @@ const fileEngineStoragePost = multer.diskStorage({
     cb(null, "./uploads/images/post");
   },
   filename: (req, file, cb) => {
-    // const ext = file.originalname.split(".");
-    // cb(null, Date.now() + "-DemoImage." + ext.slice(-1));
     cb(null, req.body.name);
   },
 });

@@ -7,6 +7,11 @@ export const getAllCat = createAsyncThunk("cat/getAllCat", async () => {
   return res.data;
 });
 
+export const getCatById = createAsyncThunk("cat/getCatById", async (data) => {
+  const res = await axios.get(`/api/category/${data}`);
+  return res.data;
+});
+
 export const createCat = createAsyncThunk("cat/createCat", async (data) => {
   const res = await axios.post("/api/category/", data);
   return res.data;
@@ -14,6 +19,7 @@ export const createCat = createAsyncThunk("cat/createCat", async (data) => {
 
 const initialState = {
   allCat: [],
+  getCatById: [],
   pending: false,
   error: false,
 };
@@ -32,6 +38,18 @@ export const categorySlice = createSlice({
       state.allCat = action.payload;
     },
     [getAllCat.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [getCatById.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [getCatById.fulfilled]: (state, action) => {
+      state.pending = false;
+      state.singleCat = action.payload;
+    },
+    [getCatById.rejected]: (state) => {
       state.pending = false;
       state.error = true;
     },
