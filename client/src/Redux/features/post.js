@@ -18,11 +18,20 @@ export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   const res = await axios.get("/api/post");
   return res.data;
 });
+
+export const getSinglePost = createAsyncThunk(
+  "post/getSinglePost",
+  async (data) => {
+    const res = await axios.get(`/api/post/${data}`);
+    return res.data;
+  }
+);
 const initialState = {
   pending: false,
   error: false,
   imgUploadResponse: {},
   allPosts: [],
+  singlePost: {},
 };
 
 export const postSlice = createSlice({
@@ -62,6 +71,18 @@ export const postSlice = createSlice({
       state.allPosts = action.payload;
     },
     [getAllPosts.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [getSinglePost.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [getSinglePost.fulfilled]: (state, action) => {
+      state.pending = false;
+      state.singlePost = action.payload;
+    },
+    [getSinglePost.rejected]: (state) => {
       state.pending = false;
       state.error = true;
     },

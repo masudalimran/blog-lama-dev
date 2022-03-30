@@ -138,10 +138,19 @@ export default function Write() {
                           : PF + "00000no_231_image.jpg"
                       }
                       alt="Halloween party"
-                      width="100%"
-                      height="150px"
-                      style={{ objectFit: "cover" }}
+                      style={{
+                        objectFit: "cover",
+                        width: "100%",
+                        height: "150px",
+                      }}
                     />
+                    <Typography
+                      variant="body2"
+                      align="center"
+                      color="secondary"
+                    >
+                      Recommended: 🖼️(1200x600)
+                    </Typography>
                   </Grid>
                   <Grid item position="absolute">
                     <label htmlFor="icon-button-file">

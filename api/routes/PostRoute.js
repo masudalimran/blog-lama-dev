@@ -18,7 +18,7 @@ postRouter.post("/", async (req, res) => {
     }
   } else {
     res
-      .status(401)
+      .status(201)
       .json({ message: `Title '${req.body.title}' already exist!` });
   }
 });
@@ -26,7 +26,7 @@ postRouter.post("/", async (req, res) => {
 // Get Single Post
 postRouter.get("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id))
-    res.status(401).json({ message: "ID invalid contains > 24 character" });
+    res.status(201).json({ message: "ID invalid contains > 24 character" });
   else {
     const postExist = await Post.findOne({ _id: req.params.id });
     if (postExist) {
@@ -36,7 +36,7 @@ postRouter.get("/:id", async (req, res) => {
         res.status(500).json(error.message);
       }
     } else {
-      res.status(401).json({ message: "No such post exist!" });
+      res.status(201).json({ message: "No such post exist!" });
     }
   }
 });
@@ -47,7 +47,7 @@ postRouter.get("/", async (req, res) => {
   const categoryId = req.query.category;
   if (userId) {
     if (!checkIfIdValid(userId))
-      res.status(401).json({ message: "Invalid ID!" });
+      res.status(201).json({ message: "Invalid ID!" });
     else {
       const userExists = await User.findById(userId);
       if (userExists) {
@@ -58,12 +58,12 @@ postRouter.get("/", async (req, res) => {
           res.status(500).json(error.message);
         }
       } else {
-        res.status(401).json({ message: "No such post exist!" });
+        res.status(201).json({ message: "No such post exist!" });
       }
     }
   } else if (categoryId) {
     if (!checkIfIdValid(categoryId))
-      res.status(401).json({ message: "Invalid ID!" });
+      res.status(201).json({ message: "Invalid ID!" });
     else {
       const categoryExists = await Category.findById(categoryId);
       if (categoryExists) {
@@ -75,7 +75,7 @@ postRouter.get("/", async (req, res) => {
         } catch (error) {
           res.status(500).json(error.message);
         }
-      } else res.status(401).json({ message: "Category Does Not Exist!" });
+      } else res.status(201).json({ message: "Category Does Not Exist!" });
     }
   } else {
     const allPosts = await Post.find();
@@ -87,7 +87,7 @@ postRouter.get("/", async (req, res) => {
 // Update Post
 postRouter.put("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.body.userId))
-    res.status(401).json({ message: "ID invalid contains > 24 character" });
+    res.status(201).json({ message: "ID invalid contains > 24 character" });
   else {
     const post = await Post.findById(req.params.id);
     if (post.userId.toString() === req.body.userId) {
@@ -103,14 +103,14 @@ postRouter.put("/:id", async (req, res) => {
       } catch (error) {
         res.status(500).json(error.message);
       }
-    } else res.status(401).json({ message: "You can only update your post" });
+    } else res.status(201).json({ message: "You can only update your post" });
   }
 });
 
 //  Delete Post
 postRouter.delete("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.body.userId))
-    res.status(401).json({ message: "ID invalid" });
+    res.status(201).json({ message: "ID invalid" });
   else {
     const post = await Post.findById(req.params.id);
     if (post.userId.toString() === req.body.userId) {
@@ -120,7 +120,7 @@ postRouter.delete("/:id", async (req, res) => {
       } catch (error) {
         res.status(500).json(error.message);
       }
-    } else res.status(401).json({ message: "You can only delete your post" });
+    } else res.status(201).json({ message: "You can only delete your post" });
   }
 });
 

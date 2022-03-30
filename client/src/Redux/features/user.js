@@ -49,6 +49,14 @@ export const getAllUser = createAsyncThunk("user/GetAllUser", async () => {
   const res = await axios.get("/api/user/");
   return res.data;
 });
+
+export const getUserById = createAsyncThunk(
+  "user/GetUserByID",
+  async (data) => {
+    const res = await axios.get(`/api/user/${data}`);
+    return res.data;
+  }
+);
 const initialState = {
   regData: {},
   loginData: {},
@@ -58,6 +66,7 @@ const initialState = {
   passCheckData: {},
   proPicData: {},
   allUser: [],
+  singleUser: {},
 };
 export const userSlice = createSlice({
   name: "user",
@@ -142,6 +151,18 @@ export const userSlice = createSlice({
       state.pending = false;
     },
     [getAllUser.rejected]: (state) => {
+      state.error = true;
+      state.pending = false;
+    },
+    [getUserById.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [getUserById.fulfilled]: (state, action) => {
+      state.singleUser = action.payload;
+      state.pending = false;
+    },
+    [getUserById.rejected]: (state) => {
       state.error = true;
       state.pending = false;
     },

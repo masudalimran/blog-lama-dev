@@ -19,7 +19,7 @@ export const createCat = createAsyncThunk("cat/createCat", async (data) => {
 
 const initialState = {
   allCat: [],
-  getCatById: [],
+  singleCat: {},
   pending: false,
   error: false,
 };
