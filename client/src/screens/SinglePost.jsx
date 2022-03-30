@@ -42,13 +42,10 @@ export default function SinglePost() {
   // State
   const [createdDistance, setCreatedDistance] = useState("");
   const [confirmPostDelete, setConfirmPostDelete] = useState(false);
-  const [deletePostSnackBar, setDeletePostSnackBar] = useState(false);
 
   // Store
   // TODO post
-  const { pending, error, singlePost, deletedPost } = useSelector(
-    (state) => state.post
-  );
+  const { pending, error, singlePost } = useSelector((state) => state.post);
   // TODO user
   const {
     pending: pendingUser,
@@ -214,20 +211,6 @@ export default function SinglePost() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={deletePostSnackBar}
-        autoHideDuration={5000}
-        onClose={() => setDeletePostSnackBar(false)}
-      >
-        <Alert
-          variant="filled"
-          onClose={() => setDeletePostSnackBar(false)}
-          severity="warning"
-          sx={{ width: "100%", mb: 3 }}
-        >
-          {deletedPost.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

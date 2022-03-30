@@ -7,11 +7,12 @@ import {
   CardMedia,
   Grid,
   Link,
+  Snackbar,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../components/body/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts } from "../Redux/features/post";
@@ -25,9 +26,11 @@ export default function Blog() {
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
   const matches2 = useMediaQuery(theme.breakpoints.up("sm"));
 
+  // state
+  const [deletePostSnackBar, setDeletePostSnackBar] = useState(false);
   // Store
   // Todo post
-  const { allPosts, pendingPosts, errorPosts } = useSelector(
+  const { allPosts, pendingPosts, errorPosts, deletedPost } = useSelector(
     (state) => state.post
   );
   // TODO Category
@@ -46,6 +49,9 @@ export default function Blog() {
     dispatch(getAllCat());
     dispatch(getAllUser());
   }, []);
+  useEffect(() => {
+    if (deletedPost.message) setDeletePostSnackBar(true);
+  }, [deletedPost]);
 
   return (
     <>
@@ -160,6 +166,21 @@ export default function Blog() {
           </Grid>
         </Grid>
       )}
+      {/* Post message snackbar */}
+      <Snackbar
+        open={deletePostSnackBar}
+        autoHideDuration={5000}
+        onClose={() => setDeletePostSnackBar(false)}
+      >
+        <Alert
+          variant="filled"
+          onClose={() => setDeletePostSnackBar(false)}
+          severity="error"
+          sx={{ width: "100%", mb: 3 }}
+        >
+          {deletedPost.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

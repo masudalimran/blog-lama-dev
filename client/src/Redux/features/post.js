@@ -104,7 +104,7 @@ export const postSlice = createSlice({
     },
     [deleteSinglePost.fulfilled]: (state, action) => {
       state.pending = false;
-      state.deleteSinglePost = action.payload;
+      state.deletedPost = action.payload;
     },
     [deleteSinglePost.rejected]: (state) => {
       state.pending = false;
