@@ -44,7 +44,7 @@ userRouter.put("/:id", async (req, res) => {
       req.body.password = await bcrypt.hashSync(req.body.password, salt);
     } else req.body.password = user.password;
     if (req.body.prevImg) {
-      fs.unlink(imagePath + req.body.prevImg, (err) => {
+      fs.unlink(imagePath + "user/" + req.body.prevImg, (err) => {
         if (err) {
           console.error(err);
           return;
