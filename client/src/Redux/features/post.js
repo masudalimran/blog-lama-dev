@@ -26,12 +26,24 @@ export const getSinglePost = createAsyncThunk(
     return res.data;
   }
 );
+
+export const deleteSinglePost = createAsyncThunk(
+  "post/deleteSinglePost",
+  async (data) => {
+    // console.log(data);
+    const res = await axios.delete(`/api/post/${data.id}/${data.userId}`);
+    return res.data;
+    // return 0;
+  }
+);
+
 const initialState = {
   pending: false,
   error: false,
   imgUploadResponse: {},
   allPosts: [],
   singlePost: {},
+  deletedPost: {},
 };
 
 export const postSlice = createSlice({
@@ -83,6 +95,18 @@ export const postSlice = createSlice({
       state.singlePost = action.payload;
     },
     [getSinglePost.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [deleteSinglePost.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [deleteSinglePost.fulfilled]: (state, action) => {
+      state.pending = false;
+      state.deleteSinglePost = action.payload;
+    },
+    [deleteSinglePost.rejected]: (state) => {
       state.pending = false;
       state.error = true;
     },

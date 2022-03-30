@@ -23,6 +23,7 @@ import { getAllUser } from "../Redux/features/user";
 export default function Blog() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
+  const matches2 = useMediaQuery(theme.breakpoints.up("sm"));
 
   // Store
   // Todo post
@@ -78,7 +79,8 @@ export default function Blog() {
                         alt={x.title + "blogImage"}
                         title={x.title}
                         style={{
-                          objectFit: "cover",
+                          objectFit: matches2 ? "cover" : "contain",
+                          objectPosition: "left",
                           width: "100%",
                           height: "300px",
                         }}
@@ -88,7 +90,7 @@ export default function Blog() {
                         <Typography variant="h5" component="div">
                           {x.title}
                         </Typography>
-                        <Grid container>
+                        <Grid container sx={{ ml: -0.5 }}>
                           {/* Author */}
                           <Grid item xs={12} md={2}>
                             <Button
@@ -150,7 +152,7 @@ export default function Blog() {
           </Grid>
         </>
       ) : (
-        <Grid container justifyContent="center" alignItem="center">
+        <Grid container justifyContent="center" alignItems="center">
           <Grid item>
             <Alert severity="warning" variant="outlined">
               No post to show

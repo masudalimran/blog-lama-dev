@@ -88,6 +88,7 @@ postRouter.get("/", async (req, res) => {
 postRouter.put("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.body.userId))
     res.status(201).json({ message: "ID invalid contains > 24 character" });
+  // console.log(req.body.userId);
   else {
     const post = await Post.findById(req.params.id);
     if (post.userId.toString() === req.body.userId) {
@@ -108,16 +109,20 @@ postRouter.put("/:id", async (req, res) => {
 });
 
 //  Delete Post
-postRouter.delete("/:id", async (req, res) => {
-  if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.body.userId))
+postRouter.delete("/:id/:userId", async (req, res) => {
+  // console.log(req.params.userId);
+  // console.log(req.params.id);
+  if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.params.userId))
     res.status(201).json({ message: "ID invalid" });
   else {
     const post = await Post.findById(req.params.id);
-    if (post.userId.toString() === req.body.userId) {
+    if (post.userId.toString() === req.params.userId) {
       try {
+        console.log("Code workds");
         await Post.findByIdAndDelete(req.params.id);
         res.json({ message: "Post deleted successfully!" });
       } catch (error) {
+        console.log("Code do not workds");
         res.status(500).json(error.message);
       }
     } else res.status(201).json({ message: "You can only delete your post" });

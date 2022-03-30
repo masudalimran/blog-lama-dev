@@ -4,9 +4,14 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   Divider,
   Grid,
   IconButton,
+  Snackbar,
   Typography,
   useMediaQuery,
   useTheme,
@@ -17,7 +22,7 @@ import SideBar from "../components/body/SideBar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSinglePost } from "../Redux/features/post";
+import { deleteSinglePost, getSinglePost } from "../Redux/features/post";
 import Loading from "../components/alerts/Loading";
 import { PF } from "../publicFolder";
 import { getCatById } from "../Redux/features/category";
@@ -27,6 +32,7 @@ import formatDistanceStrict from "date-fns/formatDistance";
 export default function SinglePost() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
+  const matches2 = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -35,10 +41,14 @@ export default function SinglePost() {
 
   // State
   const [createdDistance, setCreatedDistance] = useState("");
+  const [confirmPostDelete, setConfirmPostDelete] = useState(false);
+  const [deletePostSnackBar, setDeletePostSnackBar] = useState(false);
 
   // Store
   // TODO post
-  const { pending, error, singlePost } = useSelector((state) => state.post);
+  const { pending, error, singlePost, deletedPost } = useSelector(
+    (state) => state.post
+  );
   // TODO user
   const {
     pending: pendingUser,
@@ -60,7 +70,6 @@ export default function SinglePost() {
     dispatch(getSinglePost(postId));
   }, [dispatch, postId]);
   // TODO get user name & category name
-  // let createdDistance;
   useEffect(() => {
     if (singlePost._id) {
       dispatch(getUserById(singlePost.userId));
@@ -76,6 +85,14 @@ export default function SinglePost() {
       );
     }
   }, [singlePost, dispatch]);
+
+  // Functions
+  const handlePostDelete = () => {
+    dispatch(
+      deleteSinglePost({ id: singlePost._id, userId: singlePost.userId })
+    );
+    navigate("/blog");
+  };
 
   return (
     <>
@@ -115,7 +132,7 @@ export default function SinglePost() {
                       : PF + "00000no_231_image.jpg"
                   }
                   style={{
-                    objectFit: "contain",
+                    objectFit: matches2 ? "cover" : "contain",
                     width: "100%",
                     height: "300px",
                   }}
@@ -131,7 +148,11 @@ export default function SinglePost() {
                       <IconButton aria-label="edit" title="Edit Post">
                         <EditIcon color="primary" />
                       </IconButton>
-                      <IconButton aria-label="delete" title="Delete Post">
+                      <IconButton
+                        aria-label="delete"
+                        title="Delete Post"
+                        onClick={() => setConfirmPostDelete(true)}
+                      >
                         <DeleteIcon color="error" />
                       </IconButton>
                     </Grid>
@@ -175,6 +196,38 @@ export default function SinglePost() {
           </Grid>
         </>
       )}
+      <Dialog
+        open={confirmPostDelete}
+        onClose={() => setConfirmPostDelete(false)}
+      >
+        <DialogContent>
+          <DialogContentText>
+            Do you Really Want To Delete This Posts?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => setConfirmPostDelete(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handlePostDelete} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={deletePostSnackBar}
+        autoHideDuration={5000}
+        onClose={() => setDeletePostSnackBar(false)}
+      >
+        <Alert
+          variant="filled"
+          onClose={() => setDeletePostSnackBar(false)}
+          severity="warning"
+          sx={{ width: "100%", mb: 3 }}
+        >
+          {deletedPost.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
