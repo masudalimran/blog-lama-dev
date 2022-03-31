@@ -9,6 +9,7 @@ import ContactUs from "./screens/ContactUs";
 import Footer from "./components/Footer";
 import ProfilePage from "./screens/User/ProfilePage";
 import EditProfilePage from "./screens/User/EditProfilePage";
+import EditPost from "./screens/EditPost";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="/single-post/:id" element={<SinglePost />} />
+          <Route path="/edit-post/:id" element={<EditPost />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />

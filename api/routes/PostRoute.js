@@ -78,7 +78,8 @@ postRouter.get("/", async (req, res) => {
       } else res.status(201).json({ message: "Category Does Not Exist!" });
     }
   } else {
-    const allPosts = await Post.find();
+    const allPosts = await Post.find().sort({ updatedAt: -1 });
+    // const allPosts = await Post.find();
     const postCount = Object.keys(allPosts).length;
     res.json({ posts: allPosts, postCount });
   }
@@ -88,7 +89,6 @@ postRouter.get("/", async (req, res) => {
 postRouter.put("/:id", async (req, res) => {
   if (!checkIfIdValid(req.params.id) || !checkIfIdValid(req.body.userId))
     res.status(201).json({ message: "ID invalid contains > 24 character" });
-  // console.log(req.body.userId);
   else {
     const post = await Post.findById(req.params.id);
     if (post.userId.toString() === req.body.userId) {

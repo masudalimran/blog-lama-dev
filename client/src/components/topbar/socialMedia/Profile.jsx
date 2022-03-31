@@ -17,6 +17,7 @@ import {
   ListSubheader,
   Snackbar,
   Alert,
+  createFilterOptions,
 } from "@mui/material";
 
 import InputAdornment from "@mui/material/InputAdornment";
@@ -25,7 +26,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SignInDialogue from "../../../screens/User/SignInDialogue";
 import SignUpDialogue from "../../../screens/User/SignUpDialogue";
 import { useNavigate } from "react-router-dom";
@@ -34,20 +35,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../Redux/features/user";
 import Loading from "../../alerts/Loading";
 import { PF } from "../../../publicFolder";
-
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-];
+import { getAllPosts } from "../../../Redux/features/post";
 
 export default function Profile() {
   // States
   const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
   const {
     openLogin,
     setOpenLogin,
@@ -65,8 +58,22 @@ export default function Profile() {
 
   // Store
   const dispatch = useDispatch();
-  const { pending } = useSelector((state) => state.user);
+  const { pending, error } = useSelector((state) => state.user);
+  const {
+    pending: pendingPosts,
+    error: errorPosts,
+    allPosts,
+  } = useSelector((state) => state.post);
   const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
+  // Use effect
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (allPosts) setPosts(allPosts.posts);
+  }, [allPosts]);
 
   // Functions
   const navigate = useNavigate();
@@ -76,20 +83,38 @@ export default function Profile() {
     setOpenLogOutConfirm(false);
     setSnackBarLogout(true);
     navigate("/");
+    window.location.reload();
+  };
+
+  // Limit options to show in autocomplete
+  const OPTIONS_LIMIT = 4;
+  const defaultFilterOptions = createFilterOptions();
+
+  const filterOptions = (options, state) => {
+    return defaultFilterOptions(options, state).slice(0, OPTIONS_LIMIT);
   };
 
   return (
     <>
-      {pending ? (
+      {pending || pendingPosts ? (
         <Loading />
+      ) : error || errorPosts ? (
+        <Alert severity="error">Something Went Wrong...</Alert>
       ) : (
         <Grid container justifyContent="flex-end">
           <Grid item lg={10} sx={{ width: { xs: "60%", sm: "80%" } }}>
             <Autocomplete
               freeSolo
-              id="free-solo-2-demo"
               disableClearable
-              options={top100Films.map((option) => option.title)}
+              filterOptions={filterOptions}
+              options={posts && posts.map((option) => option.title)}
+              onChange={(e, value) => {
+                posts &&
+                  posts.map((x) => {
+                    if (x.title === value) navigate(`/single-post/${x._id}`);
+                    return 0;
+                  });
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}

@@ -14,6 +14,12 @@ export const uploadBlogImg = createAsyncThunk(
   }
 );
 
+export const updatePost = createAsyncThunk("post/updatePost", async (data) => {
+  const { id, data: postData } = data;
+  const res = await axios.put(`/api/post/${id}`, postData);
+  return res.data;
+});
+
 export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   const res = await axios.get("/api/post");
   return res.data;
@@ -30,10 +36,8 @@ export const getSinglePost = createAsyncThunk(
 export const deleteSinglePost = createAsyncThunk(
   "post/deleteSinglePost",
   async (data) => {
-    // console.log(data);
     const res = await axios.delete(`/api/post/${data.id}/${data.userId}`);
     return res.data;
-    // return 0;
   }
 );
 
@@ -44,6 +48,7 @@ const initialState = {
   allPosts: [],
   singlePost: {},
   deletedPost: {},
+  updatedPost: {},
 };
 
 export const postSlice = createSlice({
@@ -71,6 +76,18 @@ export const postSlice = createSlice({
       state.imgUploadResponse = action.payload;
     },
     [uploadBlogImg.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [updatePost.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [updatePost.fulfilled]: (state, action) => {
+      state.pending = false;
+      state.updatedPost = action.payload;
+    },
+    [updatePost.rejected]: (state) => {
       state.pending = false;
       state.error = true;
     },

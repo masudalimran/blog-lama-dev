@@ -29,7 +29,7 @@ export default function ProfilePage() {
       navigate("/");
     } else {
     }
-  }, [navigate]);
+  }, [navigate, localData]);
   return (
     <>
       <Typography
@@ -58,7 +58,7 @@ export default function ProfilePage() {
           <img
             src={
               localData.profilePic
-                ? PF +"user/"+ localData.profilePic
+                ? PF + "user/" + localData.profilePic
                 : PF + "00000no_231_image.jpg"
             }
             alt={localData.username + " Profile Picture"}
@@ -181,7 +181,6 @@ export default function ProfilePage() {
             </Grid>
           </Grid>
         </Grid>
-
         <Grid item xs={0} md={0} xl={3}>
           {matches && <SideBar />}
         </Grid>

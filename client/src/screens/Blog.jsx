@@ -26,6 +26,9 @@ export default function Blog() {
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
   const matches2 = useMediaQuery(theme.breakpoints.up("sm"));
 
+  // Check Login Status
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
   // state
   const [deletePostSnackBar, setDeletePostSnackBar] = useState(false);
   // Store
@@ -48,7 +51,7 @@ export default function Blog() {
     dispatch(getAllPosts());
     dispatch(getAllCat());
     dispatch(getAllUser());
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     if (deletedPost.message) setDeletePostSnackBar(true);
   }, [deletedPost]);
@@ -69,7 +72,7 @@ export default function Blog() {
             Blog Posts ({allPosts.postCount || ""})
           </Typography>
           <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={10} xl={9}>
+            <Grid item xs={localData ? 10 : 12} xl={localData ? 9 : 11}>
               <Grid container spacing={2} flexDirection="column">
                 {allPosts.posts.map((x, i) => (
                   <Grid item key={i}>
@@ -152,9 +155,11 @@ export default function Blog() {
                 ))}
               </Grid>
             </Grid>
-            <Grid item md={0} xl={2}>
-              {matches && <SideBar />}
-            </Grid>
+            {localData && (
+              <Grid item md={0} xl={2}>
+                {matches && <SideBar />}
+              </Grid>
+            )}
           </Grid>
         </>
       ) : (

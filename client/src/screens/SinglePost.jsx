@@ -11,7 +11,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  Snackbar,
   Typography,
   useMediaQuery,
   useTheme,
@@ -35,12 +34,16 @@ export default function SinglePost() {
   const matches2 = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
 
+  // Check Login Status
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
   const handleBack = () => {
     navigate(-1);
   };
 
   // State
   const [createdDistance, setCreatedDistance] = useState("");
+  const [modifyDistance, setModifyDistance] = useState("");
   const [confirmPostDelete, setConfirmPostDelete] = useState(false);
 
   // Store
@@ -74,6 +77,15 @@ export default function SinglePost() {
       setCreatedDistance(
         formatDistanceStrict(
           new Date(singlePost.createdAt),
+          new Date(Date.now()),
+          {
+            addSuffix: true,
+          }
+        )
+      );
+      setModifyDistance(
+        formatDistanceStrict(
+          new Date(singlePost.updatedAt),
           new Date(Date.now()),
           {
             addSuffix: true,
@@ -117,7 +129,7 @@ export default function SinglePost() {
             justifyContent="center"
             sx={{ minHeight: "90vh" }}
           >
-            <Grid item xs={11} lg={10}>
+            <Grid item xs={localData ? 11 : 12} lg={localData ? 10 : 12}>
               <Card sx={{ ml: 1 }} variant="outlined">
                 <CardMedia
                   component="img"
@@ -142,7 +154,11 @@ export default function SinglePost() {
                       </Typography>
                     </Grid>
                     <Grid item>
-                      <IconButton aria-label="edit" title="Edit Post">
+                      <IconButton
+                        aria-label="edit"
+                        title="Edit Post"
+                        onClick={() => navigate(`/edit-post/${singlePost._id}`)}
+                      >
                         <EditIcon color="primary" />
                       </IconButton>
                       <IconButton
@@ -160,14 +176,30 @@ export default function SinglePost() {
                   <Typography variant="body2" component="div" color="primary">
                     Category: {singleCat && singleCat.catName}
                   </Typography>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    component="div"
-                    color="error"
-                  >
-                    {createdDistance}
-                  </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item>
+                      <Typography
+                        gutterBottom
+                        variant="subtitle2"
+                        component="div"
+                        color="secondary"
+                      >
+                        Created: {createdDistance}
+                      </Typography>
+                    </Grid>
+                    {createdDistance !== modifyDistance && (
+                      <Grid item>
+                        <Typography
+                          gutterBottom
+                          variant="subtitle2"
+                          component="div"
+                          color="error"
+                        >
+                          Last modified: {modifyDistance}
+                        </Typography>
+                      </Grid>
+                    )}
+                  </Grid>
                   <Divider />
                   <Typography
                     variant="body2"
@@ -187,9 +219,11 @@ export default function SinglePost() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={0} lg={2}>
-              {matches && <SideBar />}
-            </Grid>
+            {localData && (
+              <Grid item xs={0} lg={2}>
+                {matches && <SideBar />}
+              </Grid>
+            )}
           </Grid>
         </>
       )}
@@ -199,7 +233,7 @@ export default function SinglePost() {
       >
         <DialogContent>
           <DialogContentText>
-            Do you Really Want To Delete This Posts?
+            Do you really want to delete this posts?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

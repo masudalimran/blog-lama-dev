@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useContext, useEffect, useState } from "react";
@@ -20,18 +20,22 @@ import DataContext from "../Context/DataContext";
 import { getAllCat } from "../Redux/features/category";
 import CreateCategory from "../components/body/category/CreateCategory";
 import Loading from "../components/alerts/Loading";
-import { uploadBlogImg, writePost } from "../Redux/features/post";
+import {
+  getSinglePost,
+  updatePost,
+  uploadBlogImg,
+} from "../Redux/features/post";
 import { PF } from "../publicFolder";
 
-export default function Write() {
+export default function EditPost() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const localData = JSON.parse(localStorage.getItem("loginInfo"));
-
   // Syncing form data
   let getTempPostString;
-  const getLocalTempPost = JSON.parse(localStorage.getItem("tempPostString"));
+  const getLocalTempPost = JSON.parse(
+    localStorage.getItem("tempPostEditString")
+  );
   if (getLocalTempPost === null || getLocalTempPost === ":|::|::|:")
     getTempPostString = ["", "", "", ""];
   else getTempPostString = getLocalTempPost.split(":|:");
@@ -41,29 +45,54 @@ export default function Write() {
   const [title, setTitle] = useState(getTempPostString[0] || "");
   const [shortDesc, setShortDesc] = useState(getTempPostString[1] || "");
   const [category, setCategory] = useState(getTempPostString[2] || "");
+  const [categoryName, setCategoryName] = useState("");
+
   const [blog, setBlog] = useState(getTempPostString[3] || "");
   // create Category
   const [catDialogueOpen, setCatDialogueOpen] = useState(false);
   const [allowSubmit, setAllowSubmit] = useState(false);
 
+  // Store
+  const { allCat, pending, error } = useSelector((state) => state.category);
+  const { pendingPost, errorPost, singlePost, updatedPost } = useSelector(
+    (state) => state.post
+  );
+
   // Use Effect
+  let { id } = useParams();
+  // Get previous post data
   useEffect(() => {
     dispatch(getAllCat());
-  }, [dispatch]);
-
+    dispatch(getSinglePost(id));
+  }, [dispatch, id]);
   useEffect(() => {
-    if (!localData) {
-      navigate("/");
+    if (singlePost._id) {
+      setTitle(singlePost.title);
+      setShortDesc(singlePost.shortDesc);
+      setCategory(singlePost.categoryId);
+      setBlog(singlePost.fullPost);
     }
-  }, [navigate, localData]);
-
+  }, [singlePost]);
+  useEffect(() => {
+    if (allCat) {
+      allCat.map((x) => {
+        if (x._id === category) setCategoryName(x.catName);
+        return 0;
+      });
+    }
+  }, [allCat, category]);
+  // Allow Submit Button
   useEffect(() => {
     if (
       title !== "" &&
       shortDesc !== "" &&
       category !== "" &&
       blog !== "" &&
-      blogImage !== ""
+      (title !== singlePost.title ||
+        shortDesc !== singlePost.shortDesc ||
+        category !== singlePost.categoryId ||
+        blog !== singlePost.fullPost ||
+        blogImage !== "")
     ) {
       setAllowSubmit(true);
     } else {
@@ -71,20 +100,19 @@ export default function Write() {
         .concat(":|:", shortDesc)
         .concat(":|:", category)
         .concat(":|:", blog);
-      localStorage.setItem("tempPostString", JSON.stringify(tempPostString));
+      localStorage.setItem(
+        "tempPostEditString",
+        JSON.stringify(tempPostString)
+      );
       setAllowSubmit(false);
     }
-  }, [title, shortDesc, category, blog, blogImage]);
+  }, [title, shortDesc, category, blog, blogImage, singlePost]);
 
-  // Store
-  const { allCat, pending, error } = useSelector((state) => state.category);
-  const { pendingPost, errorPost } = useSelector((state) => state.post);
+  //   Functions
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
 
-  // Data Context
   const { setOpenLogin } = useContext(DataContext);
-
-  // Functions
-  const handlePublishBlog = (e) => {
+  const handleUpdateBlog = (e) => {
     e.preventDefault();
     if (!localStorage.getItem("loginInfo")) {
       setOpenLogin(true);
@@ -111,13 +139,12 @@ export default function Write() {
         data.append("blogImg", blogImage);
         createdPost.postPic = filename;
         dispatch(uploadBlogImg(data));
-        dispatch(writePost(createdPost));
-        localStorage.removeItem("tempPostString");
-        navigate("/");
       }
+      dispatch(updatePost({ id: singlePost._id, data: createdPost }));
+      localStorage.removeItem("tempPostEditString");
+      navigate(`/single-post/${singlePost._id}`);
     }
   };
-
   return (
     <>
       {pending || pendingPost ? (
@@ -132,7 +159,7 @@ export default function Write() {
           />
           <Grid container justifyContent="center">
             <Grid item lg={6} xs={10}>
-              <Box component="form" onSubmit={handlePublishBlog}>
+              <Box component="form" onSubmit={handleUpdateBlog}>
                 <Grid
                   container
                   flexDirection="column"
@@ -140,10 +167,23 @@ export default function Write() {
                   alignItems="center"
                 >
                   <Grid item>
+                    <Typography
+                      color="inherit"
+                      sx={{
+                        textDecoration: "underline",
+                        fontSize: { xs: "20px", md: "32px" },
+                      }}
+                    >
+                      Edit Post
+                    </Typography>
+                  </Grid>
+                  <Grid item>
                     <img
                       src={
                         blogImage !== ""
                           ? URL.createObjectURL(blogImage)
+                          : singlePost.postPic
+                          ? PF + "post/" + singlePost.postPic
                           : PF + "00000no_231_image.jpg"
                       }
                       alt="Halloween party"
@@ -216,15 +256,15 @@ export default function Write() {
                           onChange={(e, value) => {
                             allCat &&
                               allCat.map((x) => {
-                                console.log(x);
                                 if (x.catName === value) setCategory(x._id);
                                 return 0;
                               });
                           }}
-                          // value={category}
+                          value={categoryName}
                           renderInput={(params) => (
                             <TextField
                               {...params}
+                              required
                               InputProps={{
                                 ...params.InputProps,
                                 type: "search",
@@ -234,32 +274,10 @@ export default function Write() {
                                   </InputAdornment>
                                 ),
                               }}
-                              variant="outlined"
                               size="small"
                             />
                           )}
                         />
-
-                        {/* <InputLabel id="demo-simple-select-label">
-                          Category
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          required
-                          value={category}
-                          label="Category"
-                          onChange={(e) => setCategory(e.target.value)}
-                        >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
-                          {allCat.map((x, i) => (
-                            <MenuItem key={i} value={x._id}>
-                              {x.catName}
-                            </MenuItem>
-                          ))}
-                        </Select> */}
                       </FormControl>
                     </Grid>
                     <Grid item xs={12} md={2}>
@@ -286,7 +304,7 @@ export default function Write() {
                     autoComplete="details"
                     error={blog.length > 1800 ? true : false}
                     inputProps={{
-                      maxlength: 2000,
+                      maxLength: 2000,
                     }}
                     helperText={
                       <Typography
@@ -300,6 +318,11 @@ export default function Write() {
                     onChange={(e) => setBlog(e.target.value)}
                   />
                 </Grid>
+                {updatedPost.message && (
+                  <Grid item>
+                    <Alert severity="error">{updatedPost.message}</Alert>
+                  </Grid>
+                )}
                 <Grid item>
                   <Button
                     fullWidth
@@ -307,10 +330,10 @@ export default function Write() {
                     color="warning"
                     onClick={() => {
                       window.location.reload();
-                      localStorage.removeItem("tempPostString");
+                      localStorage.removeItem("tempPostEditString");
                     }}
                   >
-                    Clear All
+                    Reset
                   </Button>
                 </Grid>
                 <Grid item>
@@ -321,7 +344,7 @@ export default function Write() {
                     sx={{ mt: 3, mb: 2 }}
                     disabled={!allowSubmit}
                   >
-                    Publish
+                    Update
                   </Button>
                 </Grid>
               </Box>

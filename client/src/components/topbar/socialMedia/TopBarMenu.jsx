@@ -22,6 +22,9 @@ export default function TopBarMenu() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
 
+  // Check Login Status
+  const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
   const handleDrawer = () => setOpenDrawer(true);
   return (
     <>
@@ -63,13 +66,15 @@ export default function TopBarMenu() {
               </Typography>
             </Link>
           </Grid>
-          <Grid item>
-            <Link href="/write-post" underline="none">
-              <Typography variant="h6" sx={TopMenu}>
-                Write Blog
-              </Typography>
-            </Link>
-          </Grid>
+          {localData && (
+            <Grid item>
+              <Link href="/write-post" underline="none">
+                <Typography variant="h6" sx={TopMenu}>
+                  Write Blog
+                </Typography>
+              </Link>
+            </Grid>
+          )}
         </Grid>
       ) : (
         <>
