@@ -1,6 +1,5 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import generateWord from "../hooks/GenerateRandomWord";
-
+import { PF } from "../publicFolder";
 export default function AboutUs() {
   return (
     <>
@@ -13,23 +12,27 @@ export default function AboutUs() {
         <Grid item>
           <Typography
             gutterBottom
-            variant="h3"
+            variant="h1"
             align="center"
             sx={{ fontSize: { xs: "1.57em", lg: "2.17em" } }}
           >
-            We are a team of Expert Web Developers
+            Goal of this website
           </Typography>
         </Grid>
         <Grid item lg={4}>
           <Typography gutterBottom variant="subtitle2" align="center">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
-            itaque natus ab maiores incidunt veritatis, obcaecati ratione
-            doloremque, repudiandae cupiditate quia asperiores culpa illo ipsum
-            accusamus vel reprehenderit aliquid ea quam, pariatur expedita
-            ducimus nihil minima. Quidem quod tenetur officia a dicta laboriosam
-            id,
+            This is a blog post website where you can express your self without
+            any restriction.
           </Typography>
         </Grid>
+        <Typography
+          gutterBottom
+          variant="h1"
+          align="center"
+          sx={{ fontSize: { xs: "1.57em", lg: "2.17em" } }}
+        >
+          Developers & Admins
+        </Typography>
       </Grid>
 
       <Grid
@@ -43,12 +46,12 @@ export default function AboutUs() {
             <CardMedia
               component="img"
               height="340"
-              image="https://dvyvvujm9h0uq.cloudfront.net/com/articles/1567146736-headshot-1.jpg"
+              image={PF + "admin/imon.jpg"}
               alt="green iguana"
             />
             <CardContent>
-              <Typography variant="h3" component="div">
-                - {generateWord(8)}
+              <Typography variant="subtitle1" component="div">
+                - MASUD AL IMRAN
               </Typography>
               <Typography
                 gutterBottom
@@ -59,8 +62,7 @@ export default function AboutUs() {
                 WEB DEVELOPER
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                Developed and maintain this website
               </Typography>
             </CardContent>
           </Card>
@@ -70,12 +72,12 @@ export default function AboutUs() {
             <CardMedia
               component="img"
               height="340"
-              image="https://www.patriotsoftware.com/wp-content/uploads/2019/04/examples-requirements-statutory-employees.jpg"
+              image={PF + "admin/saif.jpg"}
               alt="green iguana"
             />
             <CardContent>
-              <Typography variant="h3" component="div">
-                - {generateWord(8)}
+              <Typography variant="subtitle1" component="div">
+                - SAIFUL ISLAM
               </Typography>
               <Typography
                 gutterBottom
@@ -83,11 +85,10 @@ export default function AboutUs() {
                 component="div"
                 color="error"
               >
-                Graphics Designer
+                Content Writer
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                Create & manage content on this website
               </Typography>
             </CardContent>
           </Card>
@@ -97,12 +98,12 @@ export default function AboutUs() {
             <CardMedia
               component="img"
               height="340"
-              image="https://www.corporatephotographylondon.com/wp-content/uploads/2019/11/HKstrategies-797-1024x683.jpg"
+              image={PF + "admin/said.jpg"}
               alt="green iguana"
             />
             <CardContent>
-              <Typography variant="h3" component="div">
-                - {generateWord(8)}
+              <Typography variant="subtitle1" component="div">
+                - SAIDUL ISLAM
               </Typography>
               <Typography
                 gutterBottom
@@ -110,11 +111,10 @@ export default function AboutUs() {
                 component="div"
                 color="error"
               >
-                PhotoShop Expert
+                Admin & Moderator
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                Maintains quality of content and website
               </Typography>
             </CardContent>
           </Card>
@@ -124,12 +124,12 @@ export default function AboutUs() {
             <CardMedia
               component="img"
               height="340"
-              image="https://media.istockphoto.com/photos/positivity-produces-success-picture-id1132793417?k=20&m=1132793417&s=612x612&w=0&h=ruIMpiiHm32UXtaLGS9NHkMWvNPCjOBUN9WPYQgRK_Y="
+              image={PF + "admin/arafat.jpeg"}
               alt="green iguana"
             />
             <CardContent>
-              <Typography variant="h3" component="div">
-                - {generateWord(8)}
+              <Typography variant="subtitle1" component="div">
+                - YASIR ARAFAT
               </Typography>
               <Typography
                 gutterBottom
@@ -137,11 +137,10 @@ export default function AboutUs() {
                 component="div"
                 color="error"
               >
-                PhotoShop Expert
+                Content Writer
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Lizards are a widespread group of squamate reptiles, with over
-                6,000 species, ranging across all continents except Antarctica
+                Create & manage content on this website
               </Typography>
             </CardContent>
           </Card>

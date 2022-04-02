@@ -8,11 +8,11 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
+  Link,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { PF } from "../../publicFolder";
 import SocialMedia from "../topbar/socialMedia/SocialMedia";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../alerts/Loading";
@@ -98,12 +98,14 @@ export default function SideBar() {
                                 {x.shortDesc}
                               </Typography>
                               {` — ${x.fullPost && x.fullPost.slice(0, 30)}…`}
-                              <Link to={`/single-post/${x._id}`}>
+                              <Link
+                                href={`/single-post/${x._id}`}
+                                underline="none"
+                              >
                                 <Button
                                   variant="text"
                                   size="small"
                                   color="error"
-                                  sx={{ textDecoration: "none" }}
                                 >
                                   Read More
                                 </Button>
