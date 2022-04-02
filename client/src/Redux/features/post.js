@@ -25,6 +25,16 @@ export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   return res.data;
 });
 
+export const getPostByCat = createAsyncThunk(
+  "post/getPostByCat",
+
+  async (data) => {
+    console.log(data);
+    const res = await axios.get(`/api/post?category=${data}`);
+    return res.data;
+  }
+);
+
 export const getSinglePost = createAsyncThunk(
   "post/getSinglePost",
   async (data) => {
@@ -46,6 +56,7 @@ const initialState = {
   error: false,
   imgUploadResponse: {},
   allPosts: [],
+  postByCat: [],
   singlePost: {},
   deletedPost: {},
   updatedPost: {},
@@ -100,6 +111,18 @@ export const postSlice = createSlice({
       state.allPosts = action.payload;
     },
     [getAllPosts.rejected]: (state) => {
+      state.pending = false;
+      state.error = true;
+    },
+    [getPostByCat.pending]: (state) => {
+      state.pending = true;
+      state.error = false;
+    },
+    [getPostByCat.fulfilled]: (state, action) => {
+      state.pending = false;
+      state.postByCat = action.payload;
+    },
+    [getPostByCat.rejected]: (state) => {
       state.pending = false;
       state.error = true;
     },

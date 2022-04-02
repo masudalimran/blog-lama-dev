@@ -18,6 +18,7 @@ import {
   Snackbar,
   Alert,
   createFilterOptions,
+  Box,
 } from "@mui/material";
 
 import InputAdornment from "@mui/material/InputAdornment";
@@ -83,7 +84,6 @@ export default function Profile() {
     setOpenLogOutConfirm(false);
     setSnackBarLogout(true);
     navigate("/");
-    window.location.reload();
   };
 
   // Limit options to show in autocomplete
@@ -107,14 +107,35 @@ export default function Profile() {
               freeSolo
               disableClearable
               filterOptions={filterOptions}
-              options={posts && posts.map((option) => option.title)}
-              onChange={(e, value) => {
-                posts &&
-                  posts.map((x) => {
-                    if (x.title === value) navigate(`/single-post/${x._id}`);
-                    return 0;
-                  });
-              }}
+              options={posts}
+              getOptionLabel={(option) => option.title}
+              renderOption={(props, option) => (
+                <Box
+                  component="li"
+                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                  {...props}
+                  onClick={() => {
+                    posts &&
+                      posts.map((x) => {
+                        if (x.title === option.title)
+                          navigate(`/single-post/${x._id}`);
+                        return 0;
+                      });
+                  }}
+                >
+                  <img
+                    loading="lazy"
+                    width="20"
+                    src={
+                      posts
+                        ? PF + "post/" + option.postPic
+                        : PF + "00000no_231_image.jpg"
+                    }
+                    alt={posts && posts.title}
+                  />
+                  {option.title}
+                </Box>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -218,6 +239,7 @@ export default function Profile() {
               </IconButton>
             </Grid>
           )}
+          {/* Login SnackBar */}
           <Snackbar
             open={snackBarLogin}
             autoHideDuration={5000}
@@ -232,6 +254,7 @@ export default function Profile() {
               Login Successful
             </Alert>
           </Snackbar>
+          {/* Logout SnackBar */}
           <Snackbar
             open={snackBarLogout}
             autoHideDuration={5000}

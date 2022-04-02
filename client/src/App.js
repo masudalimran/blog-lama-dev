@@ -10,6 +10,8 @@ import Footer from "./components/Footer";
 import ProfilePage from "./screens/User/ProfilePage";
 import EditProfilePage from "./screens/User/EditProfilePage";
 import EditPost from "./screens/EditPost";
+import PreviewProfilePage from "./screens/User/PreviewProfilePage";
+import BlogByCat from "./screens/BlogByCat";
 
 function App() {
   return (
@@ -23,8 +25,10 @@ function App() {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog-by-cat/:id" element={<BlogByCat />} />
           <Route path="/write-post" element={<Write />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:id" element={<PreviewProfilePage />} />
           <Route path="/edit-profile" element={<EditProfilePage />} />
         </Route>
       </Routes>

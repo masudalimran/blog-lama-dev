@@ -216,12 +216,10 @@ export default function Write() {
                           onChange={(e, value) => {
                             allCat &&
                               allCat.map((x) => {
-                                console.log(x);
                                 if (x.catName === value) setCategory(x._id);
                                 return 0;
                               });
                           }}
-                          // value={category}
                           renderInput={(params) => (
                             <TextField
                               {...params}
@@ -239,7 +237,6 @@ export default function Write() {
                             />
                           )}
                         />
-
                         {/* <InputLabel id="demo-simple-select-label">
                           Category
                         </InputLabel>

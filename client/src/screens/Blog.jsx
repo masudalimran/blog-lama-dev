@@ -102,27 +102,41 @@ export default function Blog() {
                         <Grid container sx={{ ml: -0.5 }}>
                           {/* Author */}
                           <Grid item xs={12} md={2}>
-                            <Button
-                              variant="text"
-                              color="secondary"
-                              size="small"
+                            <Link
+                              href={`/profile/${x.userId}`}
+                              underline="none"
                             >
-                              Author:{" "}
-                              {allUser.map((y) => {
-                                if (y._id === x.userId) return y.username;
-                                else return null;
-                              })}
-                            </Button>
+                              <Button
+                                variant="text"
+                                color="secondary"
+                                size="small"
+                              >
+                                Author:{" "}
+                                {allUser.map((y) => {
+                                  if (y._id === x.userId) return y.username;
+                                  else return null;
+                                })}
+                              </Button>
+                            </Link>
                           </Grid>
                           {/* Category */}
                           <Grid item xs={12} md={2}>
-                            <Button variant="text" color="primary" size="small">
-                              Category:{" "}
-                              {allCat.map((y) => {
-                                if (y._id === x.categoryId) return y.catName;
-                                else return null;
-                              })}
-                            </Button>
+                            <Link
+                              href={`/blog-by-cat/${x.categoryId}`}
+                              underline="none"
+                            >
+                              <Button
+                                variant="text"
+                                color="primary"
+                                size="small"
+                              >
+                                Category:{" "}
+                                {allCat.map((y) => {
+                                  if (y._id === x.categoryId) return y.catName;
+                                  else return null;
+                                })}
+                              </Button>
+                            </Link>
                           </Grid>
                         </Grid>
                         {/* Short Description */}

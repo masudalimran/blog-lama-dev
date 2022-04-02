@@ -60,7 +60,7 @@ export default function SideBar() {
                 />
               </Box>
               <Typography variant="subtitle1" align="center">
-                {localData.username}
+                {localData.username.toUpperCase()}
               </Typography>
               <Divider variant="middle" sx={{ mt: 1 }} />
               <Typography variant="h6" align="center">
@@ -72,47 +72,56 @@ export default function SideBar() {
             <List
               sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
             >
-              {latestPosts.map((x, i) => (
-                <ListItem alignItems="flex-start" key={i}>
-                  <ListItemAvatar>
-                    <Avatar
-                      alt={x.title}
-                      title={x.title}
-                      src={x.postPic && PF + "post/" + x.postPic}
-                      variant="square"
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={x.title}
-                    secondary={
-                      <>
-                        <Typography
-                          sx={{ display: "inline" }}
-                          component="span"
-                          variant="body2"
-                          color="text.primary"
-                        >
-                          {x.shortDesc}
-                        </Typography>
-                        {` — ${x.fullPost && x.fullPost.slice(0, 30)}…`}
-                        <Link to={`/single-post/${x._id}`}>
-                          <Button
-                            variant="text"
-                            size="small"
-                            color="error"
-                            sx={{ textDecoration: "none" }}
-                          >
-                            Read More
-                          </Button>
-                        </Link>
-                      </>
-                    }
-                    sx={{
-                      borderBottom: "1px solid gray",
-                    }}
-                  />
-                </ListItem>
-              ))}
+              {latestPosts.length > 0 ? (
+                latestPosts.map(
+                  (x, i) =>
+                    x.userId === localData._id && (
+                      <ListItem alignItems="flex-start" key={i}>
+                        <ListItemAvatar>
+                          <Avatar
+                            alt={x.title}
+                            title={x.title}
+                            src={x.postPic && PF + "post/" + x.postPic}
+                            variant="square"
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={x.title}
+                          secondary={
+                            <>
+                              <Typography
+                                sx={{ display: "inline" }}
+                                component="span"
+                                variant="body2"
+                                color="text.primary"
+                              >
+                                {x.shortDesc}
+                              </Typography>
+                              {` — ${x.fullPost && x.fullPost.slice(0, 30)}…`}
+                              <Link to={`/single-post/${x._id}`}>
+                                <Button
+                                  variant="text"
+                                  size="small"
+                                  color="error"
+                                  sx={{ textDecoration: "none" }}
+                                >
+                                  Read More
+                                </Button>
+                              </Link>
+                            </>
+                          }
+                          sx={{
+                            borderBottom: "1px solid gray",
+                          }}
+                        />
+                      </ListItem>
+                    )
+                )
+              ) : (
+                <Typography align="center" variant="subtitle1" color="error">
+                  No Post To Show
+                </Typography>
+              )}
             </List>
             <Divider variant="middle" sx={{ mt: 1 }} />
             <Typography variant="h6" align="center">

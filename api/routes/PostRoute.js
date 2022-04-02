@@ -71,7 +71,9 @@ postRouter.get("/", async (req, res) => {
           const postByCat = await Post.find({
             categoryId: categoryId,
           });
-          res.json(postByCat);
+          const postCount = Object.keys(postByCat).length;
+          res.json({ posts: postByCat, postCount });
+          // res.json(postByCat);
         } catch (error) {
           res.status(500).json(error.message);
         }

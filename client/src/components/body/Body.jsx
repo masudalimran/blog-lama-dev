@@ -7,6 +7,7 @@ export default function Body() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("xl"));
   const localData = JSON.parse(localStorage.getItem("loginInfo"));
+
   return (
     <>
       <Grid container justifyContent="center">

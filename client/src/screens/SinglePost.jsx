@@ -14,6 +14,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Link,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -170,12 +171,28 @@ export default function SinglePost() {
                       </IconButton>
                     </Grid>
                   </Grid>
-                  <Typography variant="body2" component="div" color="primary">
-                    Author: {singleUser && singleUser.username}
-                  </Typography>
-                  <Typography variant="body2" component="div" color="primary">
-                    Category: {singleCat && singleCat.catName}
-                  </Typography>
+                  <Grid container flexDirection="column" sx={{ ml: -0.5 }}>
+                    <Grid item>
+                      <Link
+                        href={`/profile/${singleUser._id}`}
+                        underline="none"
+                      >
+                        <Button variant="text" color="primary" size="small">
+                          Author: {singleUser && singleUser.username}
+                        </Button>
+                      </Link>
+                    </Grid>
+                    <Grid item>
+                      <Link
+                        href={`/blog-by-cat/${singleCat._id}`}
+                        underline="none"
+                      >
+                        <Button variant="text" color="primary" size="small">
+                          Category: {singleCat && singleCat.catName}
+                        </Button>
+                      </Link>
+                    </Grid>
+                  </Grid>
                   <Grid container spacing={2}>
                     <Grid item>
                       <Typography
